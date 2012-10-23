@@ -1,4 +1,7 @@
+# Mac OSX files
 .DS_Store
+
+# wordpress files
 .htaccess
 wp-config.php
 wp-content/uploads/
@@ -13,3 +16,6 @@ wp-content/cache/
 wp-content/backups/
 sitemap.xml
 sitemap.xml.gz
+
+# Cloud9 files
+.c9revisions/
