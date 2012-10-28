@@ -1,7 +1,11 @@
 /* ==========================================================================
    HTML5 Boilerplate styles - h5bp.com (generated via initializr.com)
+   Modified by @dotnetCarpenter
    ========================================================================== */
 
+/* ===================
+   ALL: Basics
+   =================== */
 html,
 button,
 input,
@@ -24,7 +28,7 @@ body {
     background: hsl(213, 95%, 85%);
     text-shadow: none;
 }
-/*
+
 hr {
     display: block;
     height: 1px;
@@ -32,7 +36,7 @@ hr {
     border-top: 1px solid #ccc;
     margin: 1em 0;
     padding: 0;
-}*/
+}
 
 img {
     vertical-align: middle;
@@ -55,23 +59,21 @@ textarea {
     padding: 0.2em 0;
 }
 
-
-/* ===== Initializr Styles ==================================================
-   Author: Jonathan Verrecchia - verekia.com/initializr/responsive-template
-   ========================================================================== */
-
 body {
-    font: 16px/26px Helvetica, Helvetica Neue, Arial;
+    font: 16px/26px "Helvetica Neue", Helvetica, Arial;
 }
 
-.wrapper {
-    width: 90%;
-    margin: 0 5%;
+aside {
+    text-transform : uppercase;
 }
+
 
 /* ===================
-    ALL: Orange Theme
+    ALL: Menu
    =================== */
+nav a {
+    
+}
 /*
 .header-container {
     border-bottom: 20px solid #e44d26;
@@ -95,7 +97,7 @@ body {
 /* ==============
     MOBILE: Menu
    ============== */
-
+/*
 nav ul {
     margin: 0;
     padding: 0;
@@ -122,11 +124,11 @@ nav a:visited {
 nav a:hover {
     text-decoration: underline;
 }
-
+*/
 /* ==============
     MOBILE: Main
    ============== */
-
+/*
 .main {
     padding: 30px 0;
 }
@@ -144,24 +146,31 @@ nav a:hover {
     color: white;
     padding: 20px 0;
 }
-
+*/
 /* ===============
     ALL: IE Fixes
    =============== */
-
+/*
 .ie7 .title {
     padding-top: 20px;
-}
+}*/
 
 /* ==========================================================================
    Author's custom styles
    ========================================================================== */
 .logo {
-    height: 216px;
-    width: 458px;
+    height: 126px;/* original: 216px */
+    width: 276; /* original: 458px */
+    overflow: hidden;
 }
-
-
+.logo:before {
+    height: 126px;/* original: 216px */
+    width: 276; /* original: 458px */
+    content: url(../images/decorations/logo.png);
+    display: inline-block;
+    font-size: 0;
+    line-height: 0;
+}
 
 
 
@@ -183,7 +192,7 @@ nav a:hover {
 /* ====================
     INTERMEDIATE: Menu
    ==================== */
-
+/*
     nav a {
         float: left;
         width: 27%;
@@ -199,18 +208,18 @@ nav a:hover {
     nav li:last-child a {
         margin-right: 0;
     }
-
+*/
 /* ========================
     INTERMEDIATE: IE Fixes
    ======================== */
-
+/*
     nav ul li {
         display: inline;
     }
 
     .oldie nav a {
         margin: 0 0.7%;
-    }
+    }*/
 }
 
 @media only screen and (min-width: 768px) {
@@ -218,18 +227,18 @@ nav a:hover {
 /* ====================
     WIDE: CSS3 Effects
    ==================== */
-
+/*
     .header-container,
     .main aside {
         -webkit-box-shadow: 0 5px 10px #aaa;
            -moz-box-shadow: 0 5px 10px #aaa;
                 box-shadow: 0 5px 10px #aaa;
     }
-
+*/
 /* ============
     WIDE: Menu
    ============ */
-
+/*
     .title {
         float: left;
     }
@@ -238,11 +247,11 @@ nav a:hover {
         float: right;
         width: 38%;
     }
-
+*/
 /* ============
     WIDE: Main
    ============ */
-
+/*
     .main article {
         float: left;
         width: 57%;
@@ -251,7 +260,7 @@ nav a:hover {
     .main aside {
         float: right;
         width: 28%;
-    }
+    }*/
 }
 
 @media only screen and (min-width: 1140px) {
@@ -260,7 +269,7 @@ nav a:hover {
     Maximal Width
    =============== */
 
-    .wrapper {
+    body {
         width: 1026px; /* 1140px - 10% for margins */
         margin: 0 auto;
     }
@@ -269,7 +278,7 @@ nav a:hover {
 /* ==========================================================================
    Helper classes
    ========================================================================== */
-
+/* using own implementation in logo class above
 .ir {
     background-color: transparent;
     border: 0;
@@ -282,7 +291,7 @@ nav a:hover {
     display: block;
     width: 0;
     height: 100%;
-}
+}*/
 
 .hidden {
     display: none !important;
