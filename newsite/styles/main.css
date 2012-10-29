@@ -11,7 +11,7 @@ button,
 input,
 select,
 textarea {
-    color: hsl(0, 0%, 13%);
+    color: hsl(0, 0%, 0%);
 }
 
 body {
@@ -31,11 +31,12 @@ body {
 
 hr {
     display: block;
-    height: 1px;
+    height: 0.2em;
     border: 0;
-    border-top: 1px solid #ccc;
+    border-top: 0.2em solid #000;
     margin: 1em 0;
     padding: 0;
+    width: 0.5em;
 }
 
 img {
@@ -63,36 +64,122 @@ body {
     font: 16px/26px "Helvetica Neue", Helvetica, Arial;
 }
 
-aside {
-    text-transform : uppercase;
+aside, .content {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    float: left;
+    position: relative;
+    vertical-align: top;
 }
 
+/* ===================
+    ALL: Layout
+   =================== */
+/*body.about-us .content {
+    background: url(../images/subfotos/IMG_1008.jpg) no-repeat;
+}*/
+.content {
+    padding-left: 30%;
+    width: 100%;
+}
+aside {
+    margin-left:-100%;
+    width: 30%;    
+/*  -webkit-transition: height 1s ease-out; 
+     -moz-transition: height 1s ease-out; 
+       -o-transition: height 1s ease-out; */
+}
+
+/* ==========================================================================
+   ALL: Background Image
+   ========================================================================== */
+#background-image {
+    overflow: hidden;
+    display: block;
+    
+    left: 15%;
+    margin: 0;    
+    position: absolute;
+    top: 0;
+    width: 85%;
+    z-index: -1;
+    -webkit-box-shadow: 0 5px 10px #aaa;
+           -moz-box-shadow: 0 5px 10px #aaa;
+                box-shadow: 0 5px 10px #aaa;
+}
+
+/* ==========================================================================
+   ALL: Logo
+   ========================================================================== */
+.logo {
+    height: 106px;/* original: 199px */
+    width: 231px; /* original: 433px */
+}
 
 /* ===================
     ALL: Menu
    =================== */
+aside {
+    background-color: #f3f3f3;  /* hsl(0, 0%, 95%); */
+    text-transform : uppercase;    
+}
+
+img, footer {
+    margin: 2em auto 2em 2em;
+}
+
+ul { padding-left: 0; }
+
+li {
+    border: 1px #000;
+    border-style: none none dashed;
+    padding-left: 2em;
+}
+
+li:first-child { border-style: dashed none; }
+
 nav a {
-    
-}
-/*
-.header-container {
-    border-bottom: 20px solid #e44d26;
+    color: #000;
+    text-decoration: none;
 }
 
-.footer-container,
-.main aside {
-    border-top: 20px solid #e44d26;
+.current-menu-item {
+    background-color: #000;
+    border-style: none;
 }
 
-.header-container,
-.footer-container,
-.main aside {
-    background: #f16529;
+.current-menu-item a {
+    color: #fff;
+    font-weight: bold;
 }
 
-.title {
-    color: white;
-}*/
+/* ==============
+    ALL: Article
+   ============== */
+article {
+    background-color: #f3f3f3;  /* hsl(0, 0%, 95%); */
+    float: right;
+    /*margin: 3.87222% 3.87222% 0;*/
+    margin: 6.687565308255%;
+    padding: 4em;
+    width: 50%;
+}
+
+article h1 {
+    font-size: 1.625em; /* 26/16=1,625 */
+    margin-top: 0;
+    text-transform: uppercase;
+}
+
+article p {
+    font-size: 0.75em; /* 12/16=0,75 */
+    line-height: 1.25em;
+}
+
+/* ==============
+    ALL: Footer
+   ============== */
+footer { font-size: 0.625em; }  /* 10/16=0,625 */
 
 /* ==============
     MOBILE: Menu
@@ -154,23 +241,6 @@ nav a:hover {
 .ie7 .title {
     padding-top: 20px;
 }*/
-
-/* ==========================================================================
-   Author's custom styles
-   ========================================================================== */
-.logo {
-    height: 126px;/* original: 216px */
-    width: 276; /* original: 458px */
-    overflow: hidden;
-}
-.logo:before {
-    height: 126px;/* original: 216px */
-    width: 276; /* original: 458px */
-    content: url(../images/decorations/logo.png);
-    display: inline-block;
-    font-size: 0;
-    line-height: 0;
-}
 
 
 
@@ -263,16 +333,16 @@ nav a:hover {
     }*/
 }
 
-@media only screen and (min-width: 1140px) {
+@media only screen and (min-width: 1306px) {
 
 /* ===============
     Maximal Width
    =============== */
 
-    body {
-        width: 1026px; /* 1140px - 10% for margins */
+    /*body {
+        width: 1366px;
         margin: 0 auto;
-    }
+    }*/
 }
 
 /* ==========================================================================
