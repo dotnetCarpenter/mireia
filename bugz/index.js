@@ -17,9 +17,10 @@ http.createServer(function (request, response) {
         var responseHeaders = {
             'Content-Type'  : 'image/jpeg'
           , 'ETag'          : eTagDigest    // this is enough to ensure caching in Safari 6.0, Chrome 18+, Firefox 17.0 (beta) and Opera Mobile 12.1
-          , 'Cache-Control' : 'max-age=31536000'    // 31536000==1year
+          , 'Expires'       : new Date(Date.now() + 31536000000).toUTCString() // 31536000000 miliseconds == 1 year
+          , 'Cache-Control' : 'max-age=31536000, public'    // 31536000 seconds == 1 year, private == browser, public == proxy and browser
           , 'Date'          : new Date().toUTCString()
-         /* , 'Last-Modified' : new Date(2012, 4, 10).toUTCString()*/
+          , 'Last-Modified' : undefined
         };
         
         console.log("got request on ", filePath, " from ", request.headers['user-agent']);
