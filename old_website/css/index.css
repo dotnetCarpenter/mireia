@@ -1,0 +1,67 @@
+html
+{
+	background-size: cover !important;
+	-webkit-background-size: cover;
+	-o-background-size: cover;
+	-khtml-background-size: cover;
+	-ms-background-size: cover;
+	background: #F6E2F4 url("../images/caballo_03edit.jpg") no-repeat center center scroll;
+}
+
+#page
+{
+	z-index: 1;
+	width: 960px;
+	min-height: 787.9848755862286px;
+	margin-left: 36px;
+}
+
+#page_position_content
+{
+	margin-top: 20px;
+	margin-bottom: 467px;
+}
+
+#master-header
+{
+	width: 0.01px;
+	left: -6px;
+	position: relative;
+}
+
+#u115
+{
+	z-index: 3;
+	width: 194px;
+	margin-right: -194px;
+}
+
+#u59
+{
+	height: 0px;
+	margin-top: 16px;
+	position: relative;
+}
+
+#pu704
+{
+	width: 0.01px;
+	padding-bottom: 188px;
+	margin-left: 870px;
+	margin-top: 4px;
+	position: relative;
+}
+
+#u704
+{
+	z-index: 6;
+	top: 143px;
+	left: 50%;
+	margin-left: 358px;
+}
+
+body
+{
+	padding-top: 10px;
+}
+

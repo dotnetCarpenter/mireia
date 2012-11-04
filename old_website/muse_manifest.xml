@@ -1,0 +1,22 @@
+<manifest alg="2" build="945" opt="false">
+  <folder name="css">
+    <file name="site_global.css" crc="4003109849"/>
+    <file name="master_a-master.css" crc="380376745" ref="index"/>
+    <file name="index.css" crc="4078724433" ref="index"/>
+  </folder>
+  <folder name="scripts">
+    <folder name="1.1">
+      <file name="jquery-1.7.min.js" crc="4285342938" ref="index"/>
+      <file name="museutils.js" crc="289253676" ref="index"/>
+      <file name="pie.js" crc="3786417276" ref="index"/>
+      <file name="pie.htc" crc="354638364" ref="index"/>
+      <file name="jquery.musepolyfill.bgsize.js" crc="3972916735" ref="index"/>
+    </folder>
+  </folder>
+  <folder name="images">
+    <file name="caballo_03edit.jpg" crc="4233904243" ref="index"/>
+    <file name="logo04_03-u115.png" crc="315841070" ref="index"/>
+    <file name="linessss-u704.png" crc="4048465736" ref="index"/>
+  </folder>
+  <file name="index.html" crc="96465485" mt="1346160820955"/>
+</manifest>

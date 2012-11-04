@@ -1,0 +1,16 @@
+#u115
+{
+	position: relative;
+}
+
+#u704
+{
+	position: fixed;
+}
+
+#u115_img,#u704_img
+{
+	display: block;
+	vertical-align: top;
+}
+
