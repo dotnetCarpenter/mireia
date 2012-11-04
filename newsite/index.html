@@ -135,125 +135,8 @@
 
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
         <script>window.jQuery || document.write('<script src="scripts/lib/jquery-1.8.2.min.js"><\/script>')</script>
-        <!--<script src="scripts/style.js"></script>-->
-        <script>
-            /**
-             * Flow example (top down)
-             * [x1, y1, x2, y2, Boolean]
-             * __________
-             * |        |
-             * |        |
-             * |        |
-             * |________|
-             * [0, 0, 941, 519, 0]
-             * __________
-             * |__|_____| [0, 0, 340, 244, urlId]
-             * |  |     |
-             * |  |     |
-             * |__|_____|
-             * [  0,   0, 340, 244, 1] // column1
-             * [  0, 244, 340, 519, 0] // column1
-             * [340,   0, 941, 244, 0] // column2
-             * [340, 244, 941, 519, 0] // column2
-             * __________
-             * |__|_____| [0,   0, 340, 244, urlId]
-             * |_||_____| [0, 244, 280, 488, urlId]
-             * | ||     |
-             * |_||_____|
-             * [  0,   0, 340, 244, 1] // column1
-             * [  0, 244, 280, 488, 1] // column1
-             * [  0, 244, 280, 519, 0] // column1
-             * [280, 244, 340, 488, 0] // column2
-             * [280, 488, 340, 519, 0] // column2
-             * [340,   0, 941, 244, 0] // column3
-             * [340, 244, 941, 488, 0] // column3
-             * [340, 488, 941, 519, 0] // column3
-             * ect.
-             */
-        
-            var ns = ns || {};  // namespace
-            // meta data for the images
-            ns.imagesMeta = [{"src":"https://c9.io/dotnetcarpenter/mireia/workspace/newsite/images/mainfotos/IMG_1691bis.jpg","height":1134,"width":1582},{"src":"https://c9.io/dotnetcarpenter/mireia/workspace/newsite/images/mainfotos/IMG_0816bis2.jpg","height":1134,"width":1304},{"src":"https://c9.io/dotnetcarpenter/mireia/workspace/newsite/images/mainfotos/IMG_1342bis.jpg","height":1125,"width":1626},{"src":"https://c9.io/dotnetcarpenter/mireia/workspace/newsite/images/mainfotos/IMG_1515.jpg","height":1134,"width":1701},{"src":"https://c9.io/dotnetcarpenter/mireia/workspace/newsite/images/mainfotos/IMG_0710bis.jpg","height":1247,"width":831},{"src":"https://c9.io/dotnetcarpenter/mireia/workspace/newsite/images/mainfotos/IMG_1057bis.jpg","height":1276,"width":850},{"src":"https://c9.io/dotnetcarpenter/mireia/workspace/newsite/images/mainfotos/IMG_0913.jpg","height":1134,"width":1701},{"src":"https://c9.io/dotnetcarpenter/mireia/workspace/newsite/images/mainfotos/IMG_1600.jpg","height":1134,"width":1701},{"src":"https://c9.io/dotnetcarpenter/mireia/workspace/newsite/images/mainfotos/IMG_0450.jpg","height":978,"width":1701},{"src":"https://c9.io/dotnetcarpenter/mireia/workspace/newsite/images/mainfotos/IMG_1185.jpg","height":1134,"width":1701},{"src":"https://c9.io/dotnetcarpenter/mireia/workspace/newsite/images/mainfotos/IMG_0145.jpg","height":1128,"width":1469},{"src":"https://c9.io/dotnetcarpenter/mireia/workspace/newsite/images/mainfotos/IMG_1417.jpg","height":1134,"width":1701}];
-            if(!Array.prototype.forEach) {
-                Array.prototype.forEach = function(fn, context) {
-                    for(var i = 0, len = this.length; i < len; ++i) {
-                      fn.call(context, this[i], i, this);
-                    }
-                };
-            }
-            if(!Array.prototype.map) {
-                Array.prototype.map = function(callback, context) {
-                    var i = 0, len = this.length >>> 0, map = [];
-                    while(i < len) {
-                        if(this[i]) {   // beware that 0 is falsy
-                            map.push(callback.call(context, this[i], i, this));
-                        }
-                        ++i;
-                    }
-                    return map;
-                };
-            }
-            // TODO: implement reduce for IE
-            // TODO: implement Object.keys for IE
-            // TODO: implement Array.isArray for IE
-            
-            ns.Canvas = function() {
-                this.factor = 0.0;
-                this.currentSlot = 0;
-                this.area = [[0, 0, $('.content').width(), $(window).height(), 0]]; /* 0 === false */
-            };
-            ns.canvas = new ns.Canvas();
-            
-            /**
-             * Creates a two dimensional array from an object
-             * @param {Object} hashtable
-             * @return {Array} list
-             */
-            /*ns.list = function(hashtable) {
-                return Object.keys(hashtable).map(function(el, i) {
-                    var list=new Array(2); list[0]=el; list[1]=hashtable[el];
-                    return list;
-                })
-            };*/
-            ns.sum = function(a,b){ return a+b; };
-            ns.imageArea = function(img1, img2) {
-                return (Array.isArray(img1) ? img1.reduce(ns.sum) : img1) + img2.reduce(ns.sum);
-            }
-            ns.resize = function(img, i , all) {
-                all[i][2] = img[2] * this.factor;
-                all[i][3] = img[3] * this.factor;
-            }
-            
-
-            ns.placeImage = function(img, i, all) {
-                if(i > 1) { /*console.log(i);*/ return; }
-                
-                console.dir(this);
-                // find next free space
-                var free, availableSpace = 0;
-                this.area.some(function(space, slotnumber) {
-                    if(!space[4]) {
-                        // test if there is enough room
-                        availableSpace += (space[2]-space[0]) * (space[3]-space[1]);                        
-                        if( availableSpace >= img[2] * img[3] ) {
-                            free = space;
-                            this.currentSlot = slotnumber;
-                            return;
-                        } else {                            
-                            free = free.concat(space);
-                        }
-                        
-                    }
-                }, this);
-                
-                this.area.unshift([ free[0], free[1], img[2], img[3], 1 ]); // insert new occupied slot (1 === true)
-         //       this.splice(1, 0, );
-                free[0] = img[2], free[1] = img[3]; // right bottom slot
-                console.log("New slot: ", free);
-                console.dir(this.area);
-            }
-             
-            // create all the image placeholders and an url-table
+        <script src="scripts/collage.js"></script>
+        <script> // create all the image placeholders and an url-table
             ns.urlTable = new Array(ns.imagesMeta.length);
             ns.imageRectangles = ns.imagesMeta.map(function(el, i) {
                 var margin = 3;
@@ -269,14 +152,11 @@
             ns.imageRectangles.forEach(ns.resize, ns.canvas);
             // place images in canvas
             ns.imageRectangles.forEach(ns.placeImage, ns.canvas);
+            ns.createImages.call(ns.canvas.area, ns.imageRectangles, ns.urlTable);
             
-            console.log(ns.canvas.factor);
-            console.dir(ns.canvas.area);
-            console.dir(ns.imageRectangles);
-            console.dir(ns.urlTable);
-            
-            
-            //[0, $(window).height(), ];   // structure == [ topLeft, bottomLeft, topRight, bottomRight]
+            console.dir(ns.canvas);
+            //console.dir(ns.imageRectangles);
+            //console.dir(ns.urlTable);
         </script>
         
         <!-- <script src="scripts/lib/jquery.masonry.min.js"></script> -->
