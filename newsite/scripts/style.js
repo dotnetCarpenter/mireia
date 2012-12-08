@@ -72,10 +72,16 @@ ns.layoutCollage = function($) {
 jQuery(function($){
     var $body = $('body');
     if($body.hasClass('about_us')) {
-        $('#background-image').load(function() {
-            ns.growAside($, this);
-            
-        });
+        var $bgImage = $('#background-image');
+        var puller = setTimeout(function() {
+            if($bgImage.height() > 0) {
+                clearTimeout(puller);
+                ns.growAside($, $bgImage);
+                $('.overlay[rel="background-image"]')
+                    .css({ height: $bgImage.height(), width: $bgImage.width() })
+                    .removeClass("hide");
+            }
+        }, 250);
     }
     if($body.hasClass('collections')) {
         /*var numberOfImages = 0, numberOfImagesLoaded = 0;

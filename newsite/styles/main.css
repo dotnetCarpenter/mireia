@@ -109,16 +109,24 @@ aside:after {   /* add white space because the footer is absolute and therefore 
     width: 85%;
     z-index: -2;
     -webkit-box-shadow: 0 5px 10px #aaa;
-           -moz-box-shadow: 0 5px 10px #aaa;
-                box-shadow: 0 5px 10px #aaa;
+       -moz-box-shadow: 0 5px 10px #aaa;
+            box-shadow: 0 5px 10px #aaa;
 }
 .overlay[rel="background-image"] {
     background: url(../images/decorations/dot_pattern_10x10px2.png);
+    opacity: 1;
     left: 15%;
     position: absolute;
     top: 0;
     z-index: -1;
+
+-webkit-transition: opacity 1s linear;
+   -moz-transition: opacity 1s linear;
+    -ms-transition: opacity 1s linear;
+     -o-transition: opacity 1s linear;
+        transition: opacity 1s linear;
 }
+.overlay[rel="background-image"].hide { opacity: 0; }
 /* ==========================================================================
    ALL: Logo
    ========================================================================== */
