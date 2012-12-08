@@ -191,13 +191,10 @@ nav a {
     position: absolute;
 }
 .collage img { max-width: 100%; }
-/*.info {    
-    background-color: hsla(100, 50%, 50%, 0.5);
-    /*height: 4.5em;*/
+/*.info {
     margin: 0.2em;
     padding: 0.2em;
     position: absolute;
-    /*width: 8em;*/
     z-index:100;
     top: .2.em;
     left: 0.2em;
