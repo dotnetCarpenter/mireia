@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title>Mireia Artigas</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width">
+        <link rel="stylesheet" href="styles/normalize.min.css">
+        <link rel="stylesheet" href="styles/main.css">
+        <script src="scripts/lib/modernizr-2.6.1-respond-1.1.0.min.js"></script>
+    </head>
+    <body class="collections">
+        <!--[if lte IE 7]>
+            <p class="chromeframe">You are using an outdated browser. <a href="http://browsehappy.com/">Upgrade your browser today</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to better experience this site.</p>
+        <![endif]-->
+        
+        <div class="content">
+           <!-- <div class="collage">
+                <img src="images/mainfotos/col1.1.jpg"/>
+            </div>
+            
+            <div class="collage">
+                <img src="images/mainfotos/col2.1.jpg"/>
+            </div>
+            
+            <div class="collage">
+                <img src="images/mainfotos/col3.1.jpg"/>
+            </div>
+            
+            <div class="collage">
+                <img src="images/mainfotos/col4.1.jpg"/>
+            </div>
+            
+            <div class="collage">
+                <img src="images/mainfotos/col5.1.jpg"/>
+            </div>
+            
+            <div class="collage">
+                <img src="images/mainfotos/col6.1.jpg"/>
+            </div> 
+            
+            <div class="collage">
+                <img src="images/mainfotos/col7.1.jpg"/>
+            </div>
+            
+            <div class="collage">
+                <img src="images/mainfotos/col8.1.jpg"/>
+            </div>
+            
+            <div class="collage">
+                <img src="images/mainfotos/unik1.jpg"/>
+            </div>            
+            
+            <div class="collage">
+                <img src="images/mainfotos/unik2.jpg"/>
+            </div>
+            
+            <div class="collage">
+                <img src="images/mainfotos/unik3.jpg"/>
+            </div>-->
+        </div>
+        
+        <aside>
+            <img src="images/decorations/logo2.png" class="logo" alt="Mireia Artigas"/>
+            <nav>
+                <ul>
+                    <li class="current-menu-item"><a href="collections.html">Collections</a></li>
+                    <li><a href="about.html">About us</a></li>
+                    <li><a href="#">The family</a></li>
+                    <li><a href="#">Contact us</a></li>
+                </ul>
+            </nav>
+            <footer>&reg;2012 Mireia Artigas</footer>
+        </aside>
+
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
+        <script>window.jQuery || document.write('<script src="scripts/lib/jquery-1.8.2.min.js"><\/script>')</script>
+        <script src="scripts/style.js"></script>
+        <script src="scripts/lib/jquery.masonry.min.js"></script>
+        <script>
+            /** TODO: put this on some server
+            function meta(conf) {
+                this.src = conf.src;
+                this.width = conf.width;
+                this.height = conf.height;
+            }
+
+            function getImageMeta() {
+                var metaData = [];
+                $('.content img').each(function(i, el) {
+                    metaData.push(new meta({ src: el.src.replace(/^.+(?=images\/)/, ''), width: el.naturalWidth, height: el.naturalHeight }));
+                });
+                return metaData;
+            }
+            console.log(
+                JSON.stringify(
+                    getImageMeta()
+                )
+            );*/
+            var ns = ns || {};  // namespace
+            ns.imagesMeta = [{"src":"images/mainfotos/col1.1.jpg","width":1701,"height":1134},{"src":"images/mainfotos/col2.1.jpg","width":1701,"height":1134},{"src":"images/mainfotos/col3.1.jpg","width":1626,"height":1125},{"src":"images/mainfotos/col4.1.jpg","width":850,"height":1276},{"src":"images/mainfotos/col5.1.jpg","width":1582,"height":1134},{"src":"images/mainfotos/col6.1.jpg","width":1701,"height":1134},{"src":"images/mainfotos/col7.1.jpg","width":1304,"height":1134},{"src":"images/mainfotos/col8.1.jpg","width":1701,"height":978},{"src":"images/mainfotos/unik1.jpg","width":1469,"height":1128},{"src":"images/mainfotos/unik2.jpg","width":831,"height":1247},{"src":"images/mainfotos/unik3.jpg","width":1701,"height":1134}];
+
+            ns.sum = function(a,b){ return a+b; };
+            ns.imageArea = function(img1, img2) {
+                return (Array.isArray(img1) ? img1.reduce(ns.sum) : img1) + img2.reduce(ns.sum);
+            }
+            ns.resize = function(img, i , all) {
+                all[i][2] = img[2] * this.factor;
+                all[i][3] = img[3] * this.factor;
+            }
+            ns.placeImage = function(img, i, all) {
+                //TODO: implement genetic algorithme for best fit, e.g. randomize image order and calc cost
+            }
+            ns.createImages = function(images, urls) {
+                images.forEach(function(img, i) {
+                    $('<img src="' + urls[i] + '" width="' + img[2] + 'px" height="' + img[3] + 'px"/>')
+                        .appendTo(ns.canvas.scene);
+                });                
+            }
+            ns.Canvas = function() {
+                this.factor = 0.0;
+                //this.currentSlot = 0;   // not used
+                this.scene = $('.content');
+                //this.area = [[0, 0, this.scene.width(), $(window).height(), 0]]; /* 0 === false */
+                this.area = [this.scene.width(), $(window).height()];
+            };
+            ns.canvas = new ns.Canvas();
+            // create all the image placeholders and an url-table
+            ns.urlTable = new Array(ns.imagesMeta.length);
+            /**
+             * [x1, y1, x2, y2, urlTableId]
+             */
+            ns.imageRectangles = ns.imagesMeta.map(function(el, i) {
+                var margin = 3;
+                ns.urlTable[i] = el.src;    // update the urlTable
+                return [0, 0, el.width + margin, el.height + margin, i];
+            });
+            // calculate how much space the images needs
+            ns.canvas.factor = Math.sqrt(
+                                    ns.canvas.area.reduce(ns.sum) /
+                                    ns.imageRectangles.reduce(ns.imageArea)
+                                );
+            // resize the images to fit in the canvas
+            ns.imageRectangles.forEach(ns.resize, ns.canvas);
+            // place images in canvas TODO: only applicable when the genetic algorithme is implemented
+            //ns.imageRectangles.forEach(ns.placeImage, ns.canvas);
+            ns.createImages(ns.imageRectangles, ns.urlTable);
+            ns.canvas.scene.masonry({
+                // options
+                itemSelector : 'img'
+            });
+            //console.dir(ns.canvas);
+            //console.dir(ns.imageRectangles);
+            //console.dir(ns.urlTable);
+            console.log(ns.canvas.factor);
+            console.dir(ns.imageRectangles);
+        </script>
+        
+        <!-- <script src="scripts/lib/jquery.isotope.min.js"></script> -->
+        
+          
+    </body>
+</html>
