@@ -105,9 +105,9 @@
             var ns = ns || {};  // namespace
             ns.imagesMeta = [{"src":"images/mainfotos/col1.1.jpg","width":1701,"height":1134},{"src":"images/mainfotos/col2.1.jpg","width":1701,"height":1134},{"src":"images/mainfotos/col3.1.jpg","width":1626,"height":1125},{"src":"images/mainfotos/col4.1.jpg","width":850,"height":1276},{"src":"images/mainfotos/unik2.jpg","width":831,"height":1247},{"src":"images/mainfotos/col5.1.jpg","width":1582,"height":1134},{"src":"images/mainfotos/col6.1.jpg","width":1701,"height":1134},{"src":"images/mainfotos/col7.1.jpg","width":1304,"height":1134},{"src":"images/mainfotos/col8.1.jpg","width":1701,"height":978},{"src":"images/mainfotos/unik1.jpg","width":1469,"height":1128},{"src":"images/mainfotos/unik3.jpg","width":1701,"height":1134}];
 
-            ns.sum = function(a,b){ return a+b; };
+            ns.multiply = function(a,b){ return a*b; };
             ns.imageArea = function(img1, img2) {
-                return (Array.isArray(img1) ? img1.reduce(ns.sum) : img1) + img2.reduce(ns.sum);
+                return (Array.isArray(img1) ? img1.reduce(ns.multiply) : img1) + img2.reduce(ns.multiply);
             }
             ns.resizeToCanvas = function(img, i , all) {
                 all[i][0] = Math.round(img[0] * this.factor);
@@ -146,7 +146,7 @@
             console.log("canvas width: ", ns.canvas.scene.width(), "canvas height: ", $(window).height());
             $('#canvas-markup').css({ height:$(window).height(), width:ns.canvas.scene.width()});
             // calculate how much space the images needs
-            ns.canvas.factor =  Math.sqrt( ns.canvas.area.reduce(ns.sum) /
+            ns.canvas.factor =  Math.sqrt( ns.canvas.area.reduce(ns.multiply) /
                                 ns.imageRectangles.reduce(ns.imageArea));
                                 
 
@@ -157,7 +157,7 @@ console.log("images = " + ns.imageRectangles.reduce(ns.imageArea) + "px2");
             // place images in canvas TODO: only applicable when the genetic algorithme is implemented
             //ns.imageRectangles.forEach(ns.placeImage, ns.canvas);
             ns.createImages(ns.imageRectangles, ns.urlTable);
-     /*       ns.canvas.scene.masonry({
+            /*ns.canvas.scene.masonry({
                 // options
                 itemSelector : 'img'
             });*/
@@ -166,7 +166,7 @@ console.log("images = " + ns.imageRectangles.reduce(ns.imageArea) + "px2");
             //console.dir(ns.urlTable);
             console.log(
                 "factor = " + ns.canvas.factor,
-                "canvas = " + ns.canvas.area.reduce(ns.sum) + "px2",
+                "canvas = " + ns.canvas.area.reduce(ns.multiply) + "px2",
                 "images = " + ns.imageRectangles.reduce(ns.imageArea) + "px2"
             );
             console.log("canvas width: ", ns.canvas.scene.width(), "canvas height: ", $(window).height());
