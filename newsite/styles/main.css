@@ -120,11 +120,11 @@ aside:after {   /* add white space because the footer is absolute and therefore 
     top: 0;
     z-index: -1;
 
--webkit-transition: opacity 1s linear;
-   -moz-transition: opacity 1s linear;
-    -ms-transition: opacity 1s linear;
-     -o-transition: opacity 1s linear;
-        transition: opacity 1s linear;
+-webkit-transition: opacity 1s ease-out;
+   -moz-transition: opacity 1s ease-out;
+    -ms-transition: opacity 1s ease-out;
+     -o-transition: opacity 1s ease-out;
+        transition: opacity 1s ease-out;
 }
 .overlay[rel="background-image"].hide { opacity: 0; }
 /* ==========================================================================
@@ -189,17 +189,10 @@ nav a {
 /* ==============
     ALL: Collage
    ============== */
-/*.collections .collage {    
-    display: inline-block;
-    position: relative;
-    /*height: 16em;*/
-   /* width: 29%;
-    margin: 0.2em;*/
-}*/
-.collections .collage {    
-    position: absolute;
+.collections .content img {
+    margin: 3px 3px 0 0;
 }
-.collage img { max-width: 100%; }
+.collections .content img { max-width: 100%; }
 /*.info {
     margin: 0.2em;
     padding: 0.2em;
