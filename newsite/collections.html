@@ -136,12 +136,12 @@
             // create all the image placeholders and an url-table
             ns.urlTable = new Array(ns.imagesMeta.length);
             /**
-             * [width, height, urlTableId]
+             * [width, height]
              */
             ns.imageRectangles = ns.imagesMeta.map(function(el, i) {
                 var margin = 3;
                 ns.urlTable[i] = el.src;    // update the urlTable
-                return [el.width + margin, el.height + margin, i];
+                return [el.width + margin, el.height + margin];
             });
             console.log("canvas width: ", ns.canvas.scene.width(), "canvas height: ", $(window).height());
             $('#canvas-markup').css({ height:$(window).height(), width:ns.canvas.scene.width()});
