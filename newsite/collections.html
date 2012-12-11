@@ -146,8 +146,8 @@
             console.log("canvas width: ", ns.canvas.scene.width(), "canvas height: ", $(window).height());
             $('#canvas-markup').css({ height:$(window).height(), width:ns.canvas.scene.width()});
             // calculate how much space the images needs
-            ns.canvas.factor =  ns.canvas.area.reduce(ns.sum) /
-                                ns.imageRectangles.reduce(ns.imageArea);
+            ns.canvas.factor =  Math.sqrt( ns.canvas.area.reduce(ns.sum) /
+                                ns.imageRectangles.reduce(ns.imageArea));
                                 
 
 console.log("images = " + ns.imageRectangles.reduce(ns.imageArea) + "px2");
