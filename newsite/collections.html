@@ -63,6 +63,7 @@
                 <img src="images/mainfotos/unik3.jpg"/>
             </div>-->
             <div id="canvas-markup" style="z-index:-1;position:absolute;background-color:hsla(120,100%,75%,0.3);left:30%;"></div>
+            <div id="coord-info" style="z-index:1;position;position:absolute;background-color:hsla(190,90%,75%,0.4);width:76px;height:60px;color:white;font-size:1.2em;"></div>
         </div>
         
         <aside>
@@ -71,7 +72,7 @@
                 <ul>
                     <li class="current-menu-item"><a href="collections.html">Collections</a></li>
                     <li><a href="about.html">About us</a></li>
-                    <li><a href="#">The family</a></li>
+                    <li><a href="#" id="coord">Show coordinates on mouseover</a></li>
                     <li><a href="#">Contact us</a></li>
                 </ul>
             </nav>
@@ -146,8 +147,10 @@
             console.log("canvas width: ", ns.canvas.scene.width(), "canvas height: ", $(window).height());
             $('#canvas-markup').css({ height:$(window).height(), width:ns.canvas.scene.width()});
             // calculate how much space the images needs
-            ns.canvas.factor =  Math.sqrt( ns.canvas.area.reduce(ns.multiply) /
-                                ns.imageRectangles.reduce(ns.imageArea));
+            ns.canvas.factor =  Math.sqrt(
+                                    ns.canvas.area.reduce(ns.multiply) /
+                                    ns.imageRectangles.reduce(ns.imageArea)
+                                );
                                 
 
 console.log("images = " + ns.imageRectangles.reduce(ns.imageArea) + "px2");
@@ -171,6 +174,17 @@ console.log("images = " + ns.imageRectangles.reduce(ns.imageArea) + "px2");
             );
             console.log("canvas width: ", ns.canvas.scene.width(), "canvas height: ", $(window).height());
             console.dir(ns.imageRectangles);
+
+            function displayCoordinates(e) {
+                displayCoordinates["coord-info"] = displayCoordinates["coord-info"] || $('#coord-info');
+                displayCoordinates["coord-info"].html("x: " + e.clientX + "<br/>y: " + e.clientY);
+                displayCoordinates["coord-info"].css({left:e.clientX + 'px', top: e.clientY + 'px'});
+                //console.dir(e);
+            }
+
+            $('#coord').on('click', function() {
+                $('.content').on('mouseover', displayCoordinates)
+            });
         </script>
         
         <!-- <script src="scripts/lib/jquery.isotope.min.js"></script> -->
