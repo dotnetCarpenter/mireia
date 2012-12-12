@@ -63,7 +63,16 @@
                 <img src="images/mainfotos/unik3.jpg"/>
             </div>-->
             <div id="canvas-markup" style="z-index:-1;position:absolute;background-color:hsla(120,100%,75%,0.3);left:30%;"></div>
-            <div id="coord-info" style="z-index:1;position;position:absolute;background-color:hsla(190,90%,75%,0.4);width:76px;height:60px;color:white;font-size:1.2em;"></div>
+            <div id="coord-info" style="z-index:1;position;position:absolute;background-color:hsla(190,90%,75%,0.4);width:263px;height:120px;color:white;">
+                <fieldset>
+                    <legend>Collage Settings:</legend>
+                    <label>Buffer Threshold:<input id="bt" type="number" value="100" /></label>
+                    <div style="font-size:1.2em;">
+                        <label>x: <span id="coord-x"></span></label>
+                        <label>y: <span id="coord-y"></span></label>
+                    </div>
+                </fieldset>
+            </div>
         </div>
         
         <aside>
@@ -82,7 +91,6 @@
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
         <script>window.jQuery || document.write('<script src="scripts/lib/jquery-1.8.2.min.js"><\/script>')</script>
         <script src="scripts/style.js"></script>
-        <script src="scripts/lib/jquery.masonry.min.js"></script>
         <script>
             /** TODO: put this on some server
             function meta(conf) {
@@ -117,7 +125,7 @@
                 //TODO: implement genetic algorithme for best fit, e.g. randomize image order and calc cost
                 ns.placeImage.go = ns.placeImage.go || true;
                 // Calc width of elements compared to canvas width
-                var width = 0, bufferThreshold = 80, len = all.length;
+                var width = 0, bufferThreshold = document.getElementById('bt').value, len = all.length;
                 if( !ns.placeImage.mod || i === ns.placeImage.mod && ns.placeImage.go) { // calc per row
                     for (var n = i; n < len; ++n) {                        
                         if( (width / this.area[0] * 100) < bufferThreshold ) {
@@ -203,13 +211,6 @@
             ns.imageRectangles.forEach(ns.placeImage, ns.canvas);
             
             ns.createImages(ns.imageRectangles, ns.urlTable);
-
-
-            /*DEBUGGING*/
-            /*ns.canvas.scene.masonry({
-                // options
-                itemSelector : 'img'
-            });*/
             //console.dir(ns.canvas);
             //console.dir(ns.imageRectangles);
             //console.dir(ns.urlTable);
@@ -226,7 +227,8 @@
 
             function displayCoordinates(e) {
                 displayCoordinates["coord-info"] = displayCoordinates["coord-info"] || $('#coord-info');
-                displayCoordinates["coord-info"].html("x: " + e.clientX + "<br/>y: " + e.clientY);
+                displayCoordinates["coord-info"].find('#coord-x').html(e.clientX);
+                displayCoordinates["coord-info"].find('#coord-y').html(e.clientY);
                 displayCoordinates["coord-info"].css({left:e.pageX + 'px', top: e.pageY + 'px'});
                 //console.dir(e);
             }
@@ -238,9 +240,5 @@
                 ;
             });
         </script>
-        
-        <!-- <script src="scripts/lib/jquery.isotope.min.js"></script> -->
-        
-          
     </body>
 </html>
