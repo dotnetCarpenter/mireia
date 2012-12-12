@@ -190,7 +190,7 @@ nav a {
     ALL: Collage
    ============== */
 .collections .content img {
-    padding: 1px;
+    margin: 10px 10px 0 0;
 }
 .collections .content img { max-width: 100%; }
 /*.info {

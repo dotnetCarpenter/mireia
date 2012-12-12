@@ -11,7 +11,7 @@
         <meta name="viewport" content="width=device-width">
         <link rel="stylesheet" href="styles/normalize.min.css">
         <link rel="stylesheet" href="styles/main.css">
-        <!--<script src="scripts/lib/modernizr-2.6.1-respond-1.1.0.min.js"></script>-->
+        <script src="scripts/lib/modernizr-2.6.1-respond-1.1.0.min.js"></script>
     </head>
     <body class="collections">
         <!--[if lte IE 7]>
@@ -19,50 +19,7 @@
         <![endif]-->
         
         <div class="content">
-           <!-- <div class="collage">
-                <img src="images/mainfotos/col1.1.jpg"/>
-            </div>
-            
-            <div class="collage">
-                <img src="images/mainfotos/col2.1.jpg"/>
-            </div>
-            
-            <div class="collage">
-                <img src="images/mainfotos/col3.1.jpg"/>
-            </div>
-            
-            <div class="collage">
-                <img src="images/mainfotos/col4.1.jpg"/>
-            </div>
-            
-            <div class="collage">
-                <img src="images/mainfotos/col5.1.jpg"/>
-            </div>
-            
-            <div class="collage">
-                <img src="images/mainfotos/col6.1.jpg"/>
-            </div> 
-            
-            <div class="collage">
-                <img src="images/mainfotos/col7.1.jpg"/>
-            </div>
-            
-            <div class="collage">
-                <img src="images/mainfotos/col8.1.jpg"/>
-            </div>
-            
-            <div class="collage">
-                <img src="images/mainfotos/unik1.jpg"/>
-            </div>            
-            
-            <div class="collage">
-                <img src="images/mainfotos/unik2.jpg"/>
-            </div>
-            
-            <div class="collage">
-                <img src="images/mainfotos/unik3.jpg"/>
-            </div>-->
-            <div id="canvas-markup" style="z-index:-1;position:absolute;background-color:hsla(120,100%,75%,0.3);left:30%;"></div>
+            <!--<div id="canvas-markup" style="z-index:-1;position:absolute;background-color:hsla(120,100%,75%,0.3);left:30%;"></div>
             <div id="coord-info" style="z-index:1;position;position:absolute;background-color:hsla(190,90%,75%,0.4);width:263px;height:120px;color:white;">
                 <fieldset>
                     <legend>Collage Settings:</legend>
@@ -72,7 +29,7 @@
                         <label>y: <span id="coord-y"></span></label>
                     </div>
                 </fieldset>
-            </div>
+            </div>-->
         </div>
         
         <aside>
@@ -125,11 +82,11 @@
                 //TODO: implement genetic algorithme for best fit, e.g. randomize image order and calc cost
                 ns.placeImage.go = ns.placeImage.go || true;
                 // Calc width of elements compared to canvas width
-                var width = 0, bufferThreshold = document.getElementById('bt').value, len = all.length;
+                var width = 0, bufferThreshold = 110, len = all.length, padding = 20;
                 if( !ns.placeImage.mod || i === ns.placeImage.mod && ns.placeImage.go) { // calc per row
                     for (var n = i; n < len; ++n) {                        
                         if( (width / this.area[0] * 100) < bufferThreshold ) {
-                            width += all[n][0];
+                            width += all[n][0] + padding;
                             console.log(
                                 "Image %s takes %spx of space - total: %spx",
                                 (n-i)+1,
@@ -169,7 +126,7 @@
                     /*
                     $('<img style="right:' + (i > 0 ? all[i-1][0] : 0) + 'px;" src="' + urls[i] + '" width="' + img[0] + 'px" height="' + img[1] + 'px"/>')*/
                     //$('<img src="' + urls[i] + '" width="' + img[0] + '" height="' + img[1] + '"/>')
-                    $('<img src="' + urls[i] + '" width="' + img[0] + '"/>')
+                    $('<img src="http://src.sencha.io/' + img[0] + '/' + urls[i] + '" width="' + img[0] + '"/>')
                         .appendTo(ns.canvas.scene);
                 });                
             }
@@ -187,22 +144,21 @@
              * [width, height]
              */
             ns.imageRectangles = ns.imagesMeta.map(function(el, i) {
-                var margin = 4;
+                var margin = 40;
                 ns.urlTable[i] = el.src;    // update the urlTable
                 return [el.width + margin, el.height + margin];
             });
             /*DEBUGGING*/
             var firstImagePerRow = [];
             console.log("canvas width: ", ns.canvas.scene.width()-17, "canvas height: ", $(window).height());
-            $('#canvas-markup').css({ height:$(window).height(), width:ns.canvas.scene.width()-17});
+            //$('#canvas-markup').css({ height:$(window).height(), width:ns.canvas.scene.width()-17});
 
             // calculate how much space the images needs
             ns.canvas.factor =  Math.sqrt(
                                     ns.canvas.area.reduce(ns.multiply) /
                                     ns.imageRectangles.reduce(ns.imageArea)
                                 );
-                                
-            /*DEBUGGING*/
+            
             console.log("images = " + ns.imageRectangles.reduce(ns.imageArea) + "px\u00B2");
 
             // resize the images to fit in the canvas
@@ -214,9 +170,11 @@
             //console.dir(ns.canvas);
             //console.dir(ns.imageRectangles);
             //console.dir(ns.urlTable);
+            /*
             firstImagePerRow.forEach(function(imgIndex) {
                 $('.content img').eq(imgIndex).css('backgroundColor', 'red');
             })
+            */
             console.log(
                 "factor = " + ns.canvas.factor,
                 "canvas = " + ns.canvas.area.reduce(ns.multiply) + "px\u00B2",
@@ -239,6 +197,19 @@
                     .on('mouseover', displayCoordinates)
                 ;
             });
+
+            ns.recalcCollage = function() {
+                ns.imageRectangles.forEach(ns.placeImage, ns.canvas);
+                ns.createImages(ns.imageRectangles, ns.urlTable);
+            }    
+            /*DEBUGGING
+            var btValue = $('#bt');
+            btValue.on('keyup', function(e) {
+
+            });
+            localStorage['bt'] = localStorage['bt'] || document.getElementById('bt').value;
+            document.getElementById('bt').value = localStorage['bt'];
+            */
         </script>
     </body>
 </html>
