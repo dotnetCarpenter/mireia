@@ -82,11 +82,11 @@
                 //TODO: implement genetic algorithme for best fit, e.g. randomize image order and calc cost
                 ns.placeImage.go = ns.placeImage.go || true;
                 // Calc width of elements compared to canvas width
-                var width = 0, bufferThreshold = 110, len = all.length, padding = 20;
+                var width = 0, bufferThreshold = 110, len = all.length, margin = 10;
                 if( !ns.placeImage.mod || i === ns.placeImage.mod && ns.placeImage.go) { // calc per row
                     for (var n = i; n < len; ++n) {                        
                         if( (width / this.area[0] * 100) < bufferThreshold ) {
-                            width += all[n][0] + padding;
+                            width += all[n][0] + margin;
                             console.log(
                                 "Image %s takes %spx of space - total: %spx",
                                 (n-i)+1,
@@ -145,7 +145,7 @@
              * [width, height]
              */
             ns.imageRectangles = ns.imagesMeta.map(function(el, i) {
-                var margin = 40;
+                var margin = 20;
                 ns.urlTable[i] = el.src;    // update the urlTable
                 return [el.width + margin, el.height + margin];
             });
