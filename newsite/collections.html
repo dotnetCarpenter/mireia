@@ -126,8 +126,8 @@
                     /*
                     $('<img style="right:' + (i > 0 ? all[i-1][0] : 0) + 'px;" src="' + urls[i] + '" width="' + img[0] + 'px" height="' + img[1] + 'px"/>')*/
                     //$('<img src="' + urls[i] + '" width="' + img[0] + '" height="' + img[1] + '"/>')
-                    //$('<img src="' + img[0] + '/' + urls[i] + '" width="' + img[0] + '"/>')
-                    $('<img src="http://src.sencha.io/' + location.href.replace(/(\w+\.\w+|\w+)$/, '') + img[0] + '/' + urls[i] + '" width="' + img[0] + '"/>')
+                    //$('<img src="' + urls[i] + '" width="' + img[0] + '"/>')
+                    $('<img src="http://src.sencha.io/' + img[0] + '/' + location.origin + '/newsite/' + urls[i] + '" width="' + img[0] + '"/>')
                         .appendTo(ns.canvas.scene);
                 });                
             }
