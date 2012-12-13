@@ -16,8 +16,13 @@ console.log(
         getImageMeta()
     )
 );*/
-function Collage() {
+/**
+ * @version 12.12.1
+ */
+function Collage(conf) {
+    conf = conf || {};
     var self = this;
+    this.id = conf.id || 'main';
     this.scrollbarWidth = (function scrollbarWidth() {
         var div = $('<div style="width:50px;height:50px;overflow:hidden;position:absolute;top:-200px;left:-200px;"><div style="height:100px;"></div>');
         // Append our div, do our calculation and then remove it
@@ -32,7 +37,7 @@ function Collage() {
     // randomize images
     shuffleArray(this.imagesMeta);
     // create an url-table
-    this.urlTable = new Array(this.imagesMeta.length);
+    this.urlTable = new Array(this.imagesMeta.length);    
     this.factor = 0.0;
     this.canvas = $('.content');
     this.area = [this.canvas.width()-this.scrollbarWidth, $(window).height()];
@@ -68,23 +73,23 @@ with({o: Collage, p: Collage.prototype}) {
         //TODO: implement genetic algorithme for best fit, e.g. randomize image order and calc cost
         // Calc width of elements compared to canvas width
         var width = 0, bufferThreshold = 100, len = all.length;
-        if( !o.range || i === o.range && o.processing) { // calc per row
+        if( !o.range || i === o.range && o.process) { // calc per row
             for (var n = i; n < len; ++n) {                        
                 if( (width / this.area[0] * 100) < bufferThreshold ) {
                     width += all[n][0] + this.imgMargin;
-                    /*console.log(
+                    console.log(
                         "Image %s takes %spx of space - total: %spx",
                         (n-i)+1,
                         all[n][0].toFixed(2),
                         width.toFixed(2)
-                    );*/
+                    );
                 } else {
                     o.range = n;                       
                     break;
                 }
             }
             if(n === len) {
-                o.processing = false;
+                o.process = false;
                 o.range = len;
             }    
             //firstImagePerRow.push(i);
@@ -93,31 +98,43 @@ with({o: Collage, p: Collage.prototype}) {
             //var delta = (100 - width / this.area[0] * 100) / 100;
             var delta = (this.area[0] - width) / (n-i), oldWidth;
             for (var n = i; n < o.range; ++n) {
-                /*console.log(
+                console.log(
                     "Resizing width: %s from %s to %s",
-                    ns.urlTable[n],
+                    this.urlTable[n],
                     all[n][0].toFixed(2),
                     (all[n][0] + delta).toFixed(2)
                     //(all[n][0] + all[n][0] * delta).toFixed(2)
-                );*/
+                );
                 //all[n][0] = all[n][0] + all[n][0] * delta;      
                 oldWidth = all[n][0];
-                all[n][0] = Math.floor(all[n][0] + delta);                  // width
+                all[n][0] = Math.floor(all[n][0] + delta);                   // width
                 all[n][1] = Math.floor(all[n][1] / oldWidth * all[n][0]);    // height
             }
         }                
     };
     p.createImages = function(images, urls) {
-        images.forEach(function insertImage(img, i, all) {
-            /*
-            $('<img style="right:' + (i > 0 ? all[i-1][0] : 0) + 'px;" src="' + urls[i] + '" width="' + img[0] + 'px" height="' + img[1] + 'px"/>')*/
-            //$('<img src="' + urls[i] + '" width="' + img[0] + '" height="' + img[1] + '"/>')
-            //$('<img src="' + urls[i] + '" width="' + img[0] + '"/>')
-            $('<img alt="Photo by Rolando Diaz" src="http://src.sencha.io/jpg100/' + img[0] + '/' + img[1] + '/' + document.baseURI.replace(/\w+\.\w{3,4}$/, '') + urls[i] + '" width="' + img[0] + '" height="' + img[1] + '"/>')
-                .appendTo(this.canvas);
-        }, this);                
+        var base = document.baseURI.replace(/\w+\.\w{3,4}$/, ''),
+            html = ['<img alt="Photo by Rolando Diaz" src="http://src.sencha.io/jpg100/',,'/',,'/',base,,'" width="',,'" height="',,'" id="',,'"/>'],
+            scene = this.canvas.find('#content-scene');
+        if( scene.has('img').length ) {
+             images.forEach(function alterImage(img, i, all) {
+                 scene.find('#' + this.id + i).prop({ width: img[0], height: img[1] }).removeClass('positioned');
+             }, this);
+        } else {
+            images.forEach(function insertImage(img, i, all) {
+                html[1] = img[0];
+                html[3] = img[1];
+                html[6] = urls[i];
+                html[8] = img[0];
+                html[10]= img[1];
+                html[12] = this.id + i;
+                $(html.join(''))
+                    .appendTo(scene);
+            }, this);
+        }
     };
     p.createCollage = p.recalc = function() {
+        console.log(this.area);
         // Calculate how much space the images needs shrunk/grown to fit the canvas
         this.factor = Math.sqrt(
             this.area.reduce(p.multiply) /
@@ -126,9 +143,10 @@ with({o: Collage, p: Collage.prototype}) {
         // resize the images to fit in the canvas
         this.imageRectangles.forEach(p.resizeToCanvas, this);
         // place images in canvas
-        o.processing = true;
+        o.process = true;
         this.imageRectangles.forEach(p.placeImage, this);
-        o.processing = true;
+        o.process = true;
+        o.range = undefined;
         this.createImages(this.imageRectangles, this.urlTable);
     }
 }
