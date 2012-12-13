@@ -21,7 +21,6 @@ console.log(
  */
 function Collage(conf) {
     conf = conf || {};
-    var self = this;
     this.id = conf.id || 'main';
     this.scrollbarWidth = (function scrollbarWidth() {
         var div = $('<div style="width:50px;height:50px;overflow:hidden;position:absolute;top:-200px;left:-200px;"><div style="height:100px;"></div>');
@@ -42,11 +41,6 @@ function Collage(conf) {
     this.canvas = $('.content');
     this.area = [this.canvas.width()-this.scrollbarWidth, $(window).height()];
     this.imgMargin = 10;
-    // initialize
-    this.imageRectangles = this.imagesMeta.map(function(el, i) {
-        self.urlTable[i] = el.src;    // update the urlTable
-        return [el.width, el.height];
-    });
    /**
      * Randomize array element order in-place.
      * Using Fisher-Yates shuffle algorithm.
@@ -135,11 +129,17 @@ with({o: Collage, p: Collage.prototype}) {
     };
     p.createCollage = p.recalc = function() {
         console.log(this.area);
+        // initialize - could be placed somewhere else
+        this.imageRectangles = this.imagesMeta.map(function(el, i) {
+            this.urlTable[i] = el.src;    // update the urlTable
+            return [el.width, el.height];
+        }, this);
         // Calculate how much space the images needs shrunk/grown to fit the canvas
         this.factor = Math.sqrt(
             this.area.reduce(p.multiply) /
             this.imageRectangles.reduce(p.imageArea)
         );
+        // end initialize - could be placed somewhere else
         // resize the images to fit in the canvas
         this.imageRectangles.forEach(p.resizeToCanvas, this);
         // place images in canvas

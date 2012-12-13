@@ -198,11 +198,11 @@ nav a {
     margin: 10px 0 0 10px;
     cursor: wait;
 
--webkit-transition: all 0.2s ease-out; 
-   -moz-transition: all 0.2s ease-out;
-    -ms-transition: all 0.2s ease-out;
-     -o-transition: all 0.2s ease-out; 
-        transition: all 0.2s ease-out;
+-webkit-transition: scale 0.2s linear 0s, all 1s linear 0s; 
+   -moz-transition: scale 0.2s linear 0s, all 1s linear 0s;
+    -ms-transition: scale 0.2s linear 0s, all 1s linear 0s;
+     -o-transition: scale 0.2s linear 0s, all 1s linear 0s;
+        transition: scale 0.2s linear 0s, all 1s linear 0s;
 }
 #content-scene .positioned {
     cursor: pointer;
@@ -214,13 +214,14 @@ nav a {
 }
 #content-scene .positioned:hover {
   -webkit-box-shadow: 0 0 8px 2px #dae67e;
+     -moz-box-shadow: 0 0 8px 2px #dae67e;
           box-shadow: 0 0 8px 2px #dae67e;
         
-  -webkit-transform: scale(1.05); 
-     -moz-transform: scale(1.03); 
-      -ms-transform: scale(1.03); 
-       -o-transform: scale(1.03); 
-          transform: scale(1.03);
+  -webkit-transform: scale(1.03); 
+   /*-moz-transform: scale(1.01); ugly in FF*/
+      -ms-transform: scale(1.01); 
+       -o-transform: scale(1.01); 
+          transform: scale(1.01);
 }
 /*.collections .content img { max-width: 100%; }*/
 /*.info {
