@@ -1,256 +1,134 @@
-/**
- * Flow example (top down)
- * [x1, y1, x2, y2, Boolean]
- * __________
- * |        |
- * |        |
- * |        |
- * |________|
- * [0, 0, 941, 519, 0]
- * __________
- * |__|_____| [0, 0, 340, 244, urlId]
- * |  |     |
- * |  |     |
- * |__|_____|
- * [  0,   0, 340, 244, 1] // column1
- * [  0, 244, 340, 519, 0] // column1
- * [340,   0, 941, 244, 0] // column2
- * [340, 244, 941, 519, 0] // column2
- * __________
- * |__|_____| [0,   0, 340, 244, urlId]
- * |_||_____| [0, 244, 280, 488, urlId]
- * | ||     |
- * |_||_____|
- * [  0,   0, 340, 244, 1] // column1
- * [  0, 244, 280, 488, 1] // column1
- * [  0, 244, 280, 519, 0] // column1
- * [280, 244, 340, 488, 0] // column2
- * [280, 488, 340, 519, 0] // column2
- * [340,   0, 941, 244, 0] // column3
- * [340, 244, 941, 488, 0] // column3
- * [340, 488, 941, 519, 0] // column3
- * ect.
- */
-
-var ns = ns || {};  // namespace
-// meta data for the images
-ns.imagesMeta = [{"src":"images/mainfotos/col1.1.jpg","width":1701,"height":1134},{"src":"images/mainfotos/col2.1.jpg","width":1701,"height":1134},{"src":"images/mainfotos/col3.1.jpg","width":1626,"height":1125},{"src":"images/mainfotos/col4.1.jpg","width":850,"height":1276},{"src":"images/mainfotos/col5.1.jpg","width":1582,"height":1134},{"src":"images/mainfotos/col6.1.jpg","width":1701,"height":1134},{"src":"images/mainfotos/col7.1.jpg","width":1304,"height":1134},{"src":"images/mainfotos/col8.1.jpg","width":1701,"height":978},{"src":"images/mainfotos/unik1.jpg","width":1469,"height":1128},{"src":"images/mainfotos/unik2.jpg","width":831,"height":1247},{"src":"images/mainfotos/unik3.jpg","width":1701,"height":1134}];
-if(!Array.prototype.forEach) {
-    Array.prototype.forEach = function(fn, context) {
-        for(var i = 0, len = this.length; i < len; ++i) {
-          fn.call(context, this[i], i, this);
-        }
-    };
+/** TODO: put this on some server
+function meta(conf) {
+    this.src = conf.src;
+    this.width = conf.width;
+    this.height = conf.height;
 }
-if(!Array.prototype.map) {
-    Array.prototype.map = function(callback, context) {
-        var i = 0, len = this.length >>> 0, map = [];
-        while(i < len) {
-            if(this[i]) {   // beware that 0 is falsy
-                map.push(callback.call(context, this[i], i, this));
-            }
-            ++i;
-        }
-        return map;
-    };
-}
-// TODO: implement reduce for IE
-// TODO: implement Object.keys for IE
-// TODO: implement Array.isArray for IE
-// TODO: implement Array.some for IE
-
-ns.Canvas = function() {
-    this.factor = 0.0;
-    this.currentSlot = 0;   // not used
-    this.scene = $('.content');
-    this.area = [[0, 0, this.scene.width(), $(window).height(), 0]]; /* 0 === false */                
-};
-ns.canvas = new ns.Canvas();
-
-/**
- * Creates a two dimensional array from an object
- * @param {Object} hashtable
- * @return {Array} list
- */
-/*ns.list = function(hashtable) {
-    return Object.keys(hashtable).map(function(el, i) {
-        var list=new Array(2); list[0]=el; list[1]=hashtable[el];
-        return list;
-    })
-};*/
-/*ns.depthFirstTraverse = function(parent, fn) {
-    if(parent.children) {
-        for(var i = 0, len = parent.children.length; i < len; ++i) {            
-            fn(parent.children[i], i, parent.children, parent);
-            depthFirstTraverse(parent.children[i], fn);
-        }
-    }
-}*/
-
-ns.fst = function(list) {                
-    return list[0];
-}
-ns.snd = function(list) {
-    return list[1];
-}
-//ns.first.depth = 0;
-ns.sum = function(a,b){ return a+b; };
-ns.imageArea = function(img1, img2) {
-    return (Array.isArray(img1) ? img1.reduce(ns.sum) : img1) + img2.reduce(ns.sum);
-}
-ns.resize = function(img, i , all) {
-    all[i][2] = img[2] * this.factor;
-    all[i][3] = img[3] * this.factor;
-}
-/**
- * Deep-First indexOf for objects and arrays
- *
-ns.indexOf = function(search) {
-    var index = 0, itCount = 0;
-    for (var prop in this) {
-		if(typeof this[prop] === 'object') {
-            if(ns.indexOf.call(this[prop], search) <= 0) {
-                return index;
-            }
-			if(index === -1) {
-				return -1;	// not found
-			}
-		} else if(search === this) {
-            return index;
-        } else if(search[prop] === this[prop]) {
-            for (;index = ns.indexOf.call(this[++itCount], search[itCount]), index !== -1;);/* { 
-                return index;
-            }
-            if(index === -1) {
-				return -1;	// not found
-			}
-		}
-        ++index;
-	}
-    if(search !== this.valueOf()) {
-        return -1;  // not found
-    }
-	return index;	// found
-}*/
-/* ORIGINAL
-function breadthFirstTraverse(parent, fn) {
-    var queue = [], result;      
-    while(parent) {
-        if(parent.children) {
-            for(var i = 0, len = parent.children.length; i < len; ++i) {
-                result = fn(parent.children[i], i, parent.children, parent);
-                if(result) { return result; }   // if fn has a return value then we'll return that value and end traversing
-                queue.push(parent.children[i]);
-            }
-        }
-        parent = queue.shift();
-    }
-}*/
-ns.breadthFirstTraverse = function breadthFirstTraverse(root, fn, context){
-    var queue = [], result, counter = 0;
-    while (root) {
-        for(var child in root) {
-            result = fn.call(context, root[child], counter++, root);
-            if(result) { return result; }   // if fn has a return value then we'll return that value and end traversing
-            if(typeof root[child] === 'object') {   // doesn't work String is also an object
-                queue.push(root[child]);
-            }
-        }
-        root = queue.shift();
-        counter = 0;
-    }
-}
-
-ns.indexOf = function indexOf(search) {
-    /*    
-    var index;
-    for(var prop in search) {   // no optimization
-        index = ns.breadthFirstTraverse(this, sfn);
-        if(index >= 0) {
-            return index;
-        }
-    }
-    return -1;
-    function sfn(subject, i, all) {    // search function
-        if( i %  search.length)
-        console.log(search[prop] || prop);
-        if( (search[prop] || prop) == subject ) {  // test for 0 eval to false if we use the strict comparison ===
-            return index;
-        }
-    }*/
-    /*var index = -1;
-    for(var i = 0, len = this.length; i < len; ++i) {        
-        ns.breadthFirstTraverse(this[i], function(subject) {
-            if(search[i] === subject) {
-                index = i;
-                if(i === search.length) {
-                    return true;
-                }
-            } else {
-                return -1;
-            }
-        });
-    }
-    return index;*/
-    var slen = search.length, matchresult = new Array(slen);
-    function found(t) {
-        return t;
-    };
-    
-    for (var j = 0, len = this.length; j < len; ++j) {
-        for (var i = 0; i < slen; ++i) {
-            matchresult[i] = search[i] === this[j][i];
-        }
-        if(matchresult.every(found)) {
-            return j;
-        }
-    }
-    return -1;
-};
-ns.debug = function(newslot, iteration, slots) {
-    //console.log(JSON.stringify(newslot));
-    var newSlotPosition = ns.indexOf.call(slots, newslot.slice(0, 3)) // the last item is an id to an URL
-      , p = ['[ ', ' ]', ' // new!'];
-    console.log("Iteration: #", iteration);
-    slots.forEach(function(slot, i) {
-        console.log(i === newSlotPosition ? p[0]+slot.toString()+p[1]+p[2] : p[0]+slot.toString()+p[1]);
+function getImageMeta() {
+    var metaData = [];
+    $('.content img').each(function(i, el) {
+        metaData.push(new meta({ src: el.src.replace(/^.+(?=images\/)/, ''), width: el.naturalWidth, height: el.naturalHeight }));
     });
+    return metaData;
 }
-ns.placeImage = function(img, i, all) {
-    if(i > 1) { /*console.log(i);*/ return; }
-    
-    //console.dir(this);
-    // find next free space
-    var free, availableSpace = 0;
-    this.area.some(function(space, slotnumber) {
-        if(!space[4]) {
-            // test if there is enough room
-            availableSpace += (space[2]-space[0]) * (space[3]-space[1]);                        
-            if( availableSpace >= img[2] * img[3] ) {
-                free = space;
-                this.currentSlot = slotnumber;
-                return;
-            } else {                            
-                free = free.concat(space);
-            }
-            
-        }
-    }, this);
-    // which row?
-    this.area.splice(i, 0,
-        [ free[0], free[1],  img[2],  img[3], 1] // insert new occupied slot (1 === true)
-      , [ free[0],  img[3],  img[2], free[3], 0]
-      , [  img[2], free[1], free[3],  img[2], 0]
-    );
-    free[0] = img[2], free[1] = img[3]; // right bottom slot
-    //this.area.unshift([ free[0], free[1], img[2], img[3], 1 ]); // insert new occupied slot (1 === true)
-    ns.debug(img, i+1, this.area);
-//     console.log("New slot: ", img);
-//     console.dir(this.area);
-}
-ns.createImages = function(images, uris) {
+console.log(
+    JSON.stringify(
+        getImageMeta()
+    )
+);*/
+function Collage() {
     var self = this;
-    images.forEach(function(img, i, all) {
-        self.scene;
+    this.scrollbarWidth = (function scrollbarWidth() {
+        var div = $('<div style="width:50px;height:50px;overflow:hidden;position:absolute;top:-200px;left:-200px;"><div style="height:100px;"></div>');
+        // Append our div, do our calculation and then remove it
+        $('body').append(div);
+        var w1 = $('div', div).innerWidth();
+        div.css('overflow-y', 'scroll');
+        var w2 = $('div', div).innerWidth();
+        $(div).remove();
+        return (w1 - w2);
+    }()) || 15; // if the scrollbar check fails then we'll guess its 15px
+    this.imagesMeta = [{"src":"images/mainfotos/col1.1.jpg","width":1701,"height":1134},{"src":"images/mainfotos/col2.1.jpg","width":1701,"height":1134},{"src":"images/mainfotos/col3.1.jpg","width":1626,"height":1125},{"src":"images/mainfotos/col5.1.jpg","width":1582,"height":1134},{"src":"images/mainfotos/col6.1.jpg","width":1701,"height":1134},{"src":"images/mainfotos/col4.1.jpg","width":850,"height":1276},{"src":"images/mainfotos/unik2.jpg","width":831,"height":1247},{"src":"images/mainfotos/col7.1.jpg","width":1304,"height":1134},{"src":"images/mainfotos/col8.1.jpg","width":1701,"height":978},{"src":"images/mainfotos/unik1.jpg","width":1469,"height":1128},{"src":"images/mainfotos/unik3.jpg","width":1701,"height":1134}];
+    // randomize images
+    shuffleArray(this.imagesMeta);
+    // create an url-table
+    this.urlTable = new Array(this.imagesMeta.length);
+    this.factor = 0.0;
+    this.canvas = $('.content');
+    this.area = [this.canvas.width()-this.scrollbarWidth, $(window).height()];
+    this.imgMargin = 10;
+    // initialize
+    this.imageRectangles = this.imagesMeta.map(function(el, i) {
+        self.urlTable[i] = el.src;    // update the urlTable
+        return [el.width, el.height];
     });
+   /**
+     * Randomize array element order in-place.
+     * Using Fisher-Yates shuffle algorithm.
+     */
+    function shuffleArray(array) {
+        for (var i = array.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var temp = array[i];
+            array[i] = array[j];
+            array[j] = temp;
+        };
+    }
+}
+with({o: Collage, p: Collage.prototype}) {                
+    p.multiply = function(a,b){ return a*b; };
+    p.imageArea = function(img1, img2) {
+        return (Array.isArray(img1) ? img1.reduce(p.multiply) : img1) + img2.reduce(p.multiply);
+    };
+    p.resizeToCanvas = function(img, i, all) {
+        all[i][0] = img[0] * this.factor;
+        all[i][1] = img[1] * this.factor;
+    };   
+    p.placeImage = function(img, i, all) {
+        //TODO: implement genetic algorithme for best fit, e.g. randomize image order and calc cost
+        // Calc width of elements compared to canvas width
+        var width = 0, bufferThreshold = 100, len = all.length;
+        if( !o.range || i === o.range && o.processing) { // calc per row
+            for (var n = i; n < len; ++n) {                        
+                if( (width / this.area[0] * 100) < bufferThreshold ) {
+                    width += all[n][0] + this.imgMargin;
+                    /*console.log(
+                        "Image %s takes %spx of space - total: %spx",
+                        (n-i)+1,
+                        all[n][0].toFixed(2),
+                        width.toFixed(2)
+                    );*/
+                } else {
+                    o.range = n;                       
+                    break;
+                }
+            }
+            if(n === len) {
+                o.processing = false;
+                o.range = len;
+            }    
+            //firstImagePerRow.push(i);
+            //console.log("i = " + i,"mod = " + ns.placeImage.mod, "image = " + ns.urlTable[i]);
+            //var delta = (100 - width / this.area[0] * 100) / (n-i) / 100;
+            //var delta = (100 - width / this.area[0] * 100) / 100;
+            var delta = (this.area[0] - width) / (n-i), oldWidth;
+            for (var n = i; n < o.range; ++n) {
+                /*console.log(
+                    "Resizing width: %s from %s to %s",
+                    ns.urlTable[n],
+                    all[n][0].toFixed(2),
+                    (all[n][0] + delta).toFixed(2)
+                    //(all[n][0] + all[n][0] * delta).toFixed(2)
+                );*/
+                //all[n][0] = all[n][0] + all[n][0] * delta;      
+                oldWidth = all[n][0];
+                all[n][0] = Math.floor(all[n][0] + delta);                  // width
+                all[n][1] = Math.floor(all[n][1] / oldWidth * all[n][0]);    // height
+            }
+        }                
+    };
+    p.createImages = function(images, urls) {
+        images.forEach(function insertImage(img, i, all) {
+            /*
+            $('<img style="right:' + (i > 0 ? all[i-1][0] : 0) + 'px;" src="' + urls[i] + '" width="' + img[0] + 'px" height="' + img[1] + 'px"/>')*/
+            //$('<img src="' + urls[i] + '" width="' + img[0] + '" height="' + img[1] + '"/>')
+            //$('<img src="' + urls[i] + '" width="' + img[0] + '"/>')
+            $('<img src="http://src.sencha.io/jpg100/' + img[0] + '/' + img[1] + '/' + document.baseURI.replace(/\w+\.\w{3,4}$/, '') + urls[i] + '" width="' + img[0] + '" height="' + img[1] + '"/>')
+                .appendTo(this.canvas);
+        }, this);                
+    };
+    p.createCollage = p.recalc = function() {
+        // Calculate how much space the images needs shrunk/grown to fit the canvas
+        this.factor = Math.sqrt(
+            this.area.reduce(p.multiply) /
+            this.imageRectangles.reduce(p.imageArea)
+        );
+        // resize the images to fit in the canvas
+        this.imageRectangles.forEach(p.resizeToCanvas, this);
+        // place images in canvas
+        o.processing = true;
+        this.imageRectangles.forEach(p.placeImage, this);
+        o.processing = true;
+        this.createImages(this.imageRectangles, this.urlTable);
+    }
 }

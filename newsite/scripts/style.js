@@ -41,32 +41,8 @@ jQuery(function($){
     }
 
     if($body.hasClass('collections')) {
-        /*var numberOfImages = 0, numberOfImagesLoaded = 0;
-        $('.content .collage').each(function(i,container){
-            var $c = $(container), $img = $c.find('img');
-            $img.on('load', function() {
-                var info = $(
-                    '<div class="info"><span>width: '
-                    + $img.width()
-                    + ' ('
-                    + $img[0].naturalWidth
-                    + ')</span><br/><span>height: '
-                    + $img.height()
-                    + ' ('
-                    + $img[0].naturalHeight
-                    + ')</span><br/>'
-                    + '<span>Aspect ratio: ' + ns.gcd($img[0].naturalWidth, $img.width()) +':'+  ns.gcd($img[0].naturalHeight,$img.height()) + '</span></div>'
-                );
-                $c.prepend(info);
-                numberOfImagesLoaded++;
-                if(numberOfImagesLoaded == numberOfImages) {
-                    //ns.layoutCollage($);
-                    ns.growAside($, $('.content'));                    
-                }
-            });
-            numberOfImages++;
-        });*/
-       // ns.layoutCollage($);
-        //ns.growAside($, $('.content'));
+        var collage = new Collage();
+        collage.createCollage();
+        ns.growAside($, $('.content'));
     }
 });

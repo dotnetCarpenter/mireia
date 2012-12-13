@@ -191,8 +191,13 @@ nav a {
    ============== */
 .collections .content img {
     margin: 10px 0 0 10px;
+-webkit-transition: width height 1s ease-out;
+   -moz-transition: width height 1s ease-out;
+    -ms-transition: width height 1s ease-out;
+     -o-transition: width height 1s ease-out;
+        transition: width height 1s ease-out;
 }
-.collections .content img { max-width: 100%; }
+/*.collections .content img { max-width: 100%; }*/
 /*.info {
     margin: 0.2em;
     padding: 0.2em;
