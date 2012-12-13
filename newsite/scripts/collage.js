@@ -113,7 +113,7 @@ with({o: Collage, p: Collage.prototype}) {
             $('<img style="right:' + (i > 0 ? all[i-1][0] : 0) + 'px;" src="' + urls[i] + '" width="' + img[0] + 'px" height="' + img[1] + 'px"/>')*/
             //$('<img src="' + urls[i] + '" width="' + img[0] + '" height="' + img[1] + '"/>')
             //$('<img src="' + urls[i] + '" width="' + img[0] + '"/>')
-            $('<img src="http://src.sencha.io/jpg100/' + img[0] + '/' + img[1] + '/' + document.baseURI.replace(/\w+\.\w{3,4}$/, '') + urls[i] + '" width="' + img[0] + '" height="' + img[1] + '"/>')
+            $('<img alt="Photo by Rolando Diaz" src="http://src.sencha.io/jpg100/' + img[0] + '/' + img[1] + '/' + document.baseURI.replace(/\w+\.\w{3,4}$/, '') + urls[i] + '" width="' + img[0] + '" height="' + img[1] + '"/>')
                 .appendTo(this.canvas);
         }, this);                
     };
