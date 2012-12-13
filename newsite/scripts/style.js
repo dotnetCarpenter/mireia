@@ -87,7 +87,7 @@ jQuery(function($){
         $(window).resize(function() {
             if(resizeTimeout)
                 clearTimeout(resizeTimeout);
-            resizeTimeout = setTimeout(resizeHandler, 400);
+            resizeTimeout = setTimeout(resizeHandler, 300);
         });
         function resizeHandler() {
             $('#content-scene').attr('style', '');

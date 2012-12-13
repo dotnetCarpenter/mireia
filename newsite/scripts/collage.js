@@ -78,7 +78,7 @@ with({o: Collage, p: Collage.prototype}) {
                         width.toFixed(2)
                     );
                 } else {
-                    o.range = n;                       
+                    o.range = n;
                     break;
                 }
             }
@@ -148,5 +148,10 @@ with({o: Collage, p: Collage.prototype}) {
         o.process = true;
         o.range = undefined;
         this.createImages(this.imageRectangles, this.urlTable);
+        // calc cost of layout - deferred
+        var self = this;
+        setTimeout(function costCalculator() {
+            console.log(self.area.reduce(p.multiply) / self.imageRectangles.reduce(p.imageArea));
+        }, 0);
     }
 }
