@@ -51,20 +51,36 @@ jQuery(function($){
             this.style.left = this.offsetLeft + 'px';
             this.className = 'positioned';      
         });*/
-        $('#content-scene img').imagesLoaded(function($images, $proper, $broken) {
+        function fixBrokenImages($broken) {
+            $broken.one('error', function () {
+                if( $(this).data('r') < 3 ) { // only try twice
+                    fixBrokenImages(this);
+                }
+            }).each(function(i, img) {                
+                img.src += '?reload=' + (($(img).data('r') || 0)+1);
+            });
+        }
+        function positionImages($proper) {
+            // find and set the coordinates of loaded images
             $proper.each(function(i, img){
                 $(img).css({
                     top: img.offsetTop,
                     left:img.offsetLeft
-                })
+                });
             });
             $proper.addClass('positioned');
+        }
+        $('#content-scene img').imagesLoaded(function($images, $proper, $broken) {
+            // reload broken images
+            fixBrokenImages($broken);
+            // position images
+            positionImages($images);
         });
         
         ns.growAside($, $content);
         
         // set the scene for effects
-        $('#content-scene').css({ width: $content.width(), height: $content.height() });        
+        $('#content-scene').css({ width: $content.width(), height: $content.height() });
         
         // set handling browser resizing
         var resizeTimeout;
@@ -80,13 +96,7 @@ jQuery(function($){
             // set the scene for effects
             $('#content-scene').css({ width: $content.width(), height: $content.height() });
             setTimeout(function() {
-                $('#content-scene img').each(function(i, img){
-                    $(img).css({
-                        top: img.offsetTop,
-                        left:img.offsetLeft
-                    })
-                });
-                $('#content-scene img').addClass('positioned');
+                positionImages($('#content-scene img'));
                 ns.growAside($, $content);
             }, 200);            
         }
