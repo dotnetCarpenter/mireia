@@ -191,11 +191,7 @@ nav a {
    ============== */
 .collections .content img {
     margin: 10px 0 0 10px;
--webkit-transition: width height 1s ease-out;
-   -moz-transition: width height 1s ease-out;
-    -ms-transition: width height 1s ease-out;
-     -o-transition: width height 1s ease-out;
-        transition: width height 1s ease-out;
+    background: url(../images/decorations/loading.gif) no-repeat 50% 50% transparent;
 }
 /*.collections .content img { max-width: 100%; }*/
 /*.info {
