@@ -189,45 +189,13 @@ nav a {
 /* ==============
     ALL: Collage
    ============== */
-<<<<<<< HEAD
 .collections .content img {
     margin: 10px 0 0 10px;
-=======
-.content-scene {
-    perspective: 800px;
-    position: relative;
-}
-.content-scene img {
-    background: url(../images/decorations/loading.gif) no-repeat 50% 50% transparent;
-    margin: 10px 0 0 10px;
-    cursor: wait;
-
--webkit-transition: scale 0.2s linear 0s, all 1s linear 0s; 
-   -moz-transition: scale 0.2s linear 0s, all 1s linear 0s;
-    -ms-transition: scale 0.2s linear 0s, all 1s linear 0s;
-     -o-transition: scale 0.2s linear 0s, all 1s linear 0s;
-        transition: scale 0.2s linear 0s, all 1s linear 0s;
->>>>>>> 7dfdefe6abfa7fbb4c72902043e6bff9416ad762
-}
-.content-scene .positioned {
-    cursor: pointer;
-    margin: 0;
-    position: absolute;
-    
-    transform-style: preserve-3d;
-    transition: transform 1s;
-    backface-visibility: hidden
-}
-.content-scene .positioned:hover {
-  -webkit-box-shadow: 0 0 8px 2px #dae67e;
-     -moz-box-shadow: 0 0 8px 2px #dae67e;
-          box-shadow: 0 0 8px 2px #dae67e;
-        
-  -webkit-transform: scale(1.03); 
-   /*-moz-transform: scale(1.01); ugly in FF*/
-      -ms-transform: scale(1.01); 
-       -o-transform: scale(1.01); 
-          transform: scale(1.01);
+-webkit-transition: width height 1s ease-out;
+   -moz-transition: width height 1s ease-out;
+    -ms-transition: width height 1s ease-out;
+     -o-transition: width height 1s ease-out;
+        transition: width height 1s ease-out;
 }
 /*.collections .content img { max-width: 100%; }*/
 /*.info {
