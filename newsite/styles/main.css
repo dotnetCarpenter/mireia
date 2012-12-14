@@ -210,7 +210,8 @@ nav a {
     position: absolute;
     
     transform-style: preserve-3d;
-    transition: transform 1s;    
+    transition: transform 1s;
+    backface-visibility: hidden;
 }
 #content-scene .positioned:hover {
   -webkit-box-shadow: 0 0 8px 2px #dae67e;

@@ -108,7 +108,7 @@ with({o: Collage, p: Collage.prototype}) {
     };
     p.createImages = function(images, urls) {
         var base = document.baseURI.replace(/\w+\.\w{3,4}$/, ''),
-            html = ['<img alt="Photo by Rolando Diaz" src="http://src.sencha.io/jpg100/',,'/',,'/',base,,'" width="',,'" height="',,'" id="',,'"/>'],
+            html = ['<img alt="Photo by Rolando Diaz" src="http://src','','.sencha.io/jpg100/',,'/',,'/',base,,'" width="',,'" height="',,'" id="',,'"/>'],
             scene = this.canvas.find('#content-scene');
         if( scene.has('img').length ) {
              images.forEach(function alterImage(img, i, all) {
@@ -116,12 +116,13 @@ with({o: Collage, p: Collage.prototype}) {
              }, this);
         } else {
             images.forEach(function insertImage(img, i, all) {
-                html[1] = img[0];
-                html[3] = img[1];
-                html[6] = urls[i];
-                html[8] = img[0];
-                html[10]= img[1];
-                html[12] = this.id + i;
+                //html[1] = i % 4 + 1;    // sencha io server shards
+                html[3] = img[0];
+                html[5] = img[1];
+                html[8] = urls[i];
+                html[10] = img[0];
+                html[12]= img[1];
+                html[14] = this.id + i;
                 $(html.join(''))
                     .appendTo(scene);
             }, this);

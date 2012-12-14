@@ -52,12 +52,15 @@ jQuery(function($){
             this.className = 'positioned';      
         });*/
         function fixBrokenImages($broken) {
+            var re = /\?reload=(\d)$/
             $broken.one('error', function () {
-                if( $(this).data('r') < 3 ) { // only try twice
-                    fixBrokenImages(this);
+                if( this.src.match(re)[1] < 3 ) { // only try twice // doesn't work in IE8 - use this.src.match(re).join('').indexOf(3)
+                    fixBrokenImages($(this));
                 }
-            }).each(function(i, img) {                
-                img.src += '?reload=' + (($(img).data('r') || 0)+1);
+            }).each(function(i, img) {
+                var tries = img.src.match(re);
+                img.src = img.src.replace(re, '') + '?reload=' + (tries ? ++tries[1] : 1);
+                console.log("tries: %s \nsrc: %s", (tries ? tries[1] : 1), img.src);
             });
         }
         function positionImages($proper) {
@@ -75,6 +78,8 @@ jQuery(function($){
             fixBrokenImages($broken);
             // position images
             positionImages($images);
+            // create new scenes behind the images
+            
         });
         
         ns.growAside($, $content);
@@ -100,5 +105,7 @@ jQuery(function($){
                 ns.growAside($, $content);
             }, 200);            
         }
+        
+        
     }
 });
