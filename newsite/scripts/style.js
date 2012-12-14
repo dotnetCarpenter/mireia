@@ -76,7 +76,8 @@ jQuery(function($){
         }
         $('.content-scene img').imagesLoaded(function($images, $proper, $broken) {
             // reload broken images
-            fixBrokenImages($broken);
+            if($broken.length)
+                fixBrokenImages($broken);
             // position images
             positionImages($images);
             // create new scenes behind the images
@@ -88,7 +89,7 @@ jQuery(function($){
         });        
         ns.growAside($, $content);        
         // set the scene for effects
-        $('#content-scene').css({ width: $content.width(), height: $content.height() });
+        $('.content-scene').css({ width: $content.width(), height: $content.height() });
         
         // set handling browser resizing
         var resizeTimeout;
@@ -98,13 +99,13 @@ jQuery(function($){
             resizeTimeout = setTimeout(resizeHandler, 300);
         });
         function resizeHandler() {
-            $('#content-scene').attr('style', '');
+            $('.content-scene').attr('style', '');
             collage.area = [collage.canvas.width()-collage.scrollbarWidth, $(window).height()];
             collage.recalc();
             // set the scene for effects
-            $('#content-scene').css({ width: $content.width(), height: $content.height() });
+            $('.content-scene').css({ width: $content.width(), height: $content.height() });
             setTimeout(function() {
-                positionImages($('#content-scene img'));
+                positionImages($('.content-scene img'));
                 ns.growAside($, $content);
             }, 200);            
         }

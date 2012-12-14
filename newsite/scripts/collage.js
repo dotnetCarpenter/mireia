@@ -23,6 +23,8 @@ function Collage(conf) {
     this.canvas = conf.canvas || $('.content');
     this.area = [this.canvas.width()-this.scrollbarWidth, $(window).height()];
     this.imgMargin = 10;
+    this.lastImageIndex = 0;
+    this.firstImagePerRow = [];
    /**
      * Randomize array element order in-place.
      * Using Fisher-Yates shuffle algorithm.
@@ -50,36 +52,33 @@ with({o: Collage, p: Collage.prototype}) {
         //TODO: implement genetic algorithme for best fit, e.g. randomize image order and calc cost
         // Calc width of elements compared to canvas width
         var width = 0, bufferThreshold = 100, len = all.length;
-        if( o.process && i === this.imagesPerRow) { // calc per row
+        if( i === this.lastImageIndex) { // calc per row
             for (var n = i; n < len; ++n) {                        
                 if( (width / this.area[0] * 100) < bufferThreshold ) {
                     width += all[n][0] + this.imgMargin;
                     console.log(
-                        "Image %s takes %spx of space - total: %spx",
+                        "Image %s takes %spx of space - total: %spx (%s%)",
                         (n-i)+1,
                         all[n][0].toFixed(2),
-                        width.toFixed(2)
+                        width.toFixed(2),
+                        (width / this.area[0] * 100).toFixed(2)
                     );
-                } else {
-                    this.imagesPerRow = n;
+                } else {                    
                     break;
                 }
             }
-            if(n === len) {
-                o.process = false;
-                this.imagesPerRow = len;
-            }    
-            //firstImagePerRow.push(i);
+            this.lastImageIndex = n;
+            this.firstImagePerRow.push(i);
             //console.log("i = " + i,"mod = " + ns.placeImage.mod, "image = " + ns.urlTable[i]);
             //var delta = (100 - width / this.area[0] * 100) / (n-i) / 100;
             //var delta = (100 - width / this.area[0] * 100) / 100;
             var delta = (this.area[0] - width) / (n-i), oldWidth;
-            for (var n = i; n < this.imagesPerRow; ++n) {
+            for (var n = i; n < this.lastImageIndex; ++n) {
                 console.log(
                     "Resizing width: %s from %s to %s",
                     this.urlTable[n],
                     all[n][0].toFixed(2),
-                    (all[n][0] + delta).toFixed(2)
+                    Math.floor(all[n][0] + delta)
                     //(all[n][0] + all[n][0] * delta).toFixed(2)
                 );
                 //all[n][0] = all[n][0] + all[n][0] * delta;      
@@ -91,7 +90,8 @@ with({o: Collage, p: Collage.prototype}) {
     };
     p.createImages = function(images, urls) {
         var base = document.baseURI.replace(/\w+\.\w{3,4}$/, ''),
-            html = ['<img alt="Photo by Rolando Diaz" src="http://src','','.sencha.io/jpg100/',,'/',,'/',base,,'" width="',,'" height="',,'" id="',,'"/>'],
+        //    html = ['<img alt="Photo by Rolando Diaz" src="http://src','','.sencha.io/jpg100/',,'/',,'/',base,,'" width="',,'" height="',,'" id="',,'"/>'],
+            html = ['<img alt="Photo by Rolando Diaz" src="',,'" width="',,'" height="',,'" id="',,'"/>'],
             scene = this.canvas.find('.content-scene');
         if( scene.has('img').length ) {
              images.forEach(function alterImage(img, i, all) {
@@ -100,12 +100,16 @@ with({o: Collage, p: Collage.prototype}) {
         } else {
             images.forEach(function insertImage(img, i, all) {
                 //html[1] = i % 4 + 1;    // sencha io server shards
-                html[3] = img[0];
+                /*html[3] = img[0];
                 html[5] = img[1];
                 html[8] = urls[i];
                 html[10] = img[0];
                 html[12]= img[1];
-                html[14] = this.id + i;
+                html[14] = this.id + i;*/
+                html[1] = urls[i];
+                html[3] = img[0];
+                html[5] = img[1];
+                html[7] = this.id + i;
                 $(html.join(''))
                     .appendTo(scene);
             }, this);
@@ -127,15 +131,14 @@ with({o: Collage, p: Collage.prototype}) {
         // resize the images to fit in the canvas
         this.imageRectangles.forEach(p.resizeToCanvas, this);
         // place images in canvas
-        o.process = true;
         this.imageRectangles.forEach(p.placeImage, this);
-        o.process = true;
-        this.imagesPerRow = undefined;
+        this.lastImageIndex = 0;    // reset
         this.createImages(this.imageRectangles, this.urlTable);
         // calc cost of layout - deferred
         var self = this;
         setTimeout(function costCalculator() {
-            console.log(self.area.reduce(p.multiply) / self.imageRectangles.reduce(p.imageArea));
+            console.log(self.area.reduce(p.multiply) / ( self.imageRectangles.reduce(p.imageArea) + self.firstImagePerRow.length * self.imgMargin ));
+            console.dir(self.firstImagePerRow);
         }, 0);
         return this;
     };
