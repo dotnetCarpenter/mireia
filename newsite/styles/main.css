@@ -189,11 +189,11 @@ nav a {
 /* ==============
     ALL: Collage
    ============== */
-#content-scene {
+.content-scene {
     perspective: 800px;
     position: relative;
 }
-#content-scene img {
+.content-scene img {
     background: url(../images/decorations/loading.gif) no-repeat 50% 50% transparent;
     margin: 10px 0 0 10px;
     cursor: wait;
@@ -204,16 +204,16 @@ nav a {
      -o-transition: scale 0.2s linear 0s, all 1s linear 0s;
         transition: scale 0.2s linear 0s, all 1s linear 0s;
 }
-#content-scene .positioned {
+.content-scene .positioned {
     cursor: pointer;
     margin: 0;
     position: absolute;
     
     transform-style: preserve-3d;
     transition: transform 1s;
-    backface-visibility: hidden;
+    backface-visibility: hidden
 }
-#content-scene .positioned:hover {
+.content-scene .positioned:hover {
   -webkit-box-shadow: 0 0 8px 2px #dae67e;
      -moz-box-shadow: 0 0 8px 2px #dae67e;
           box-shadow: 0 0 8px 2px #dae67e;

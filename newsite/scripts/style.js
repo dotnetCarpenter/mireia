@@ -44,6 +44,7 @@ jQuery(function($){
     if($body.hasClass('collections')) {
         var $content = $('.content');
         var collage = new Collage();
+        var subCollages = [];
         collage.createCollage();
         // absolute position all collage images so we can create effects        
         /*$('#content-scene img').on('load', function(e) {
@@ -54,7 +55,7 @@ jQuery(function($){
         function fixBrokenImages($broken) {
             var re = /\?reload=(\d)$/
             $broken.one('error', function () {
-                if( this.src.match(re)[1] < 3 ) { // only try twice // doesn't work in IE8 - use this.src.match(re).join('').indexOf(3)
+                if( this.src.match(re)[1] < 3 ) { // only try twice
                     fixBrokenImages($(this));
                 }
             }).each(function(i, img) {
@@ -73,17 +74,19 @@ jQuery(function($){
             });
             $proper.addClass('positioned');
         }
-        $('#content-scene img').imagesLoaded(function($images, $proper, $broken) {
+        $('.content-scene img').imagesLoaded(function($images, $proper, $broken) {
             // reload broken images
             fixBrokenImages($broken);
             // position images
             positionImages($images);
             // create new scenes behind the images
-            
-        });
-        
-        ns.growAside($, $content);
-        
+            /*$images.each(function createScenes(i, img) {
+                if(i !== 0)
+                    return;
+                subCollages.push( (new Collage( { canvas: $('<div class="sub"><div class="content-scene"></div></div>').insertAfter(img), id: img.id + 'sub' } )).createCollage() );
+            });*/
+        });        
+        ns.growAside($, $content);        
         // set the scene for effects
         $('#content-scene').css({ width: $content.width(), height: $content.height() });
         

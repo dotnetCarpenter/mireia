@@ -1,21 +1,3 @@
-/** TODO: put this on some server
-function meta(conf) {
-    this.src = conf.src;
-    this.width = conf.width;
-    this.height = conf.height;
-}
-function getImageMeta() {
-    var metaData = [];
-    $('.content img').each(function(i, el) {
-        metaData.push(new meta({ src: el.src.replace(/^.+(?=images\/)/, ''), width: el.naturalWidth, height: el.naturalHeight }));
-    });
-    return metaData;
-}
-console.log(
-    JSON.stringify(
-        getImageMeta()
-    )
-);*/
 /**
  * @version 12.12.1
  */
@@ -38,7 +20,7 @@ function Collage(conf) {
     // create an url-table
     this.urlTable = new Array(this.imagesMeta.length);    
     this.factor = 0.0;
-    this.canvas = $('.content');
+    this.canvas = conf.canvas || $('.content');
     this.area = [this.canvas.width()-this.scrollbarWidth, $(window).height()];
     this.imgMargin = 10;
    /**
@@ -46,9 +28,10 @@ function Collage(conf) {
      * Using Fisher-Yates shuffle algorithm.
      */
     function shuffleArray(array) {
+        var j, temp;
         for (var i = array.length - 1; i > 0; i--) {
-            var j = Math.floor(Math.random() * (i + 1));
-            var temp = array[i];
+            j = Math.floor(Math.random() * (i + 1));
+            temp = array[i];
             array[i] = array[j];
             array[j] = temp;
         };
@@ -67,7 +50,7 @@ with({o: Collage, p: Collage.prototype}) {
         //TODO: implement genetic algorithme for best fit, e.g. randomize image order and calc cost
         // Calc width of elements compared to canvas width
         var width = 0, bufferThreshold = 100, len = all.length;
-        if( !o.range || i === o.range && o.process) { // calc per row
+        if( o.process && i === this.imagesPerRow) { // calc per row
             for (var n = i; n < len; ++n) {                        
                 if( (width / this.area[0] * 100) < bufferThreshold ) {
                     width += all[n][0] + this.imgMargin;
@@ -78,20 +61,20 @@ with({o: Collage, p: Collage.prototype}) {
                         width.toFixed(2)
                     );
                 } else {
-                    o.range = n;
+                    this.imagesPerRow = n;
                     break;
                 }
             }
             if(n === len) {
                 o.process = false;
-                o.range = len;
+                this.imagesPerRow = len;
             }    
             //firstImagePerRow.push(i);
             //console.log("i = " + i,"mod = " + ns.placeImage.mod, "image = " + ns.urlTable[i]);
             //var delta = (100 - width / this.area[0] * 100) / (n-i) / 100;
             //var delta = (100 - width / this.area[0] * 100) / 100;
             var delta = (this.area[0] - width) / (n-i), oldWidth;
-            for (var n = i; n < o.range; ++n) {
+            for (var n = i; n < this.imagesPerRow; ++n) {
                 console.log(
                     "Resizing width: %s from %s to %s",
                     this.urlTable[n],
@@ -109,7 +92,7 @@ with({o: Collage, p: Collage.prototype}) {
     p.createImages = function(images, urls) {
         var base = document.baseURI.replace(/\w+\.\w{3,4}$/, ''),
             html = ['<img alt="Photo by Rolando Diaz" src="http://src','','.sencha.io/jpg100/',,'/',,'/',base,,'" width="',,'" height="',,'" id="',,'"/>'],
-            scene = this.canvas.find('#content-scene');
+            scene = this.canvas.find('.content-scene');
         if( scene.has('img').length ) {
              images.forEach(function alterImage(img, i, all) {
                  scene.find('#' + this.id + i).prop({ width: img[0], height: img[1] }).removeClass('positioned');
@@ -147,12 +130,16 @@ with({o: Collage, p: Collage.prototype}) {
         o.process = true;
         this.imageRectangles.forEach(p.placeImage, this);
         o.process = true;
-        o.range = undefined;
+        this.imagesPerRow = undefined;
         this.createImages(this.imageRectangles, this.urlTable);
         // calc cost of layout - deferred
         var self = this;
         setTimeout(function costCalculator() {
             console.log(self.area.reduce(p.multiply) / self.imageRectangles.reduce(p.imageArea));
         }, 0);
+        return this;
+    };
+    p.toString = function() {
+        return this.id;
     }
 }
