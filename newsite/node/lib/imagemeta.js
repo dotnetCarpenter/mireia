@@ -16,6 +16,7 @@ function meta(conf) {
 
 with({ p: exports, fs: require('fs'), im: require('imagemagick') }) {
     p.writeMetaObjects = function(filepath, images, verbose) {
+        //TODO: if several objects are written to file, the JSON is invalid. remove: '][' from file
     	if(verbose)
 			console.log("Will append to %s", filepath);
 		fs.createWriteStream(filepath, { flags:"a" }).write(JSON.stringify(images));
