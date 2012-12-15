@@ -4,6 +4,20 @@ ns.gcd = function(a, b) {
   return b ? ns.gcd(b, a % b) : a;
 };*/
 
+// image meta data
+ns.main = [{"src":"images/mainfotos/col1.1.jpg","width":1701,"height":1134},{"src":"images/mainfotos/col2.1.jpg","width":1701,"height":1134},{"src":"images/mainfotos/col3.1.jpg","width":1626,"height":1125},{"src":"images/mainfotos/col5.1.jpg","width":1582,"height":1134},{"src":"images/mainfotos/col6.1.jpg","width":1701,"height":1134},{"src":"images/mainfotos/col4.1.jpg","width":850,"height":1276},{"src":"images/mainfotos/unik2.jpg","width":831,"height":1247},{"src":"images/mainfotos/col7.1.jpg","width":1304,"height":1134},{"src":"images/mainfotos/col8.1.jpg","width":1701,"height":978},{"src":"images/mainfotos/unik1.jpg","width":1469,"height":1128},{"src":"images/mainfotos/unik3.jpg","width":1701,"height":1134}];
+ns.col1 = [{"src":"images/mainfotos/col1.1.jpg","width":1701,"height":1134},{"src":"images/subfotos/col1.2.jpg","width":1701,"height":1134},{"src":"images/subfotos/col1.5.jpg","width":1701,"height":1134},{"src":"images/subfotos/col1.3.jpg","width":1701,"height":1134},{"src":"images/subfotos/col1.4.jpg","width":1701,"height":1134}];
+ns.col2 = [{"src":"images/subfotos/col3.2.jpg","width":1107,"height":1701},{"src":"images/subfotos/col3.4.jpg","width":1701,"height":1134},{"src":"images/subfotos/col3.3.jpg","width":1701,"height":1134},{"src":"images/mainfotos/col3.1.jpg","width":1626,"height":1125}];
+ns.col3 = [{"src":"images/subfotos/col3.2.jpg","width":1107,"height":1701},{"src":"images/subfotos/col3.4.jpg","width":1701,"height":1134},{"src":"images/subfotos/col3.3.jpg","width":1701,"height":1134},{"src":"images/mainfotos/col3.1.jpg","width":1626,"height":1125}];
+ns.col4 = [{"src":"images/mainfotos/col4.1.jpg","width":850,"height":1276},{"src":"images/subfotos/col4.2.jpg","width":1128,"height":1458},{"src":"images/subfotos/col4.4.jpg","width":1678,"height":1130},{"src":"images/subfotos/col4.3.jpg","width":1701,"height":1134}];
+ns.col5 = [{"src":"images/mainfotos/col5.1.jpg","width":1582,"height":1134},{"src":"images/subfotos/col5.3.jpg","width":4984,"height":3936},{"src":"images/subfotos/col5.2.jpg","width":5360,"height":3936}];
+ns.col6 = [{"src":"images/subfotos/col6.2.jpg","width":1134,"height":1701},{"src":"images/subfotos/col6.3.jpg","width":1701,"height":1134},{"src":"images/mainfotos/col6.1.jpg","width":1701,"height":1134}];
+ns.col7 = [{"src":"images/mainfotos/col7.1.jpg","width":1304,"height":1134},{"src":"images/subfotos/col7.2.jpg","width":1478,"height":1132},{"src":"images/subfotos/col7.3.jpg","width":1134,"height":1701}];
+ns.col8 = [{"src":"images/subfotos/col8.2.jpg","width":1603,"height":870},{"src":"images/subfotos/col8.3.jpg","width":1607,"height":926},{"src":"images/mainfotos/col8.1.jpg","width":1701,"height":978}];
+ns.unik1 = [{"src":"images/mainfotos/unik1.jpg","width":1469,"height":1128}];
+ns.unik2 = [{"src":"images/mainfotos/unik2.jpg","width":831,"height":1247}];
+ns.unik3 = [{"src":"images/mainfotos/unik3.jpg","width":1701,"height":1134}];
+
 ns.growAside = function($, elementToMatch) {
     $('aside').height(
         $(elementToMatch).height()
@@ -43,7 +57,7 @@ jQuery(function($){
 
     if($body.hasClass('collections')) {
         var $content = $('.content');
-        var collage = new Collage();
+        var collage = new Collage({ meta: ns.main });
         var subCollages = [];
         collage.createCollage();
         // absolute position all collage images so we can create effects        
@@ -86,7 +100,8 @@ jQuery(function($){
                     $(this).toggleClass('flipped');
                 });
             });*/
-            var backsideHTML = ['<div class="back content-scene" style="width:',,'px;height:',,'px;" />']
+            var backsideHTML = ['<div class="back content-scene" style="width:',,'px;height:',,'px;" />'],
+                collection = /(col|unik)\d{1,2}/;
             $images.each(function createScenes(i, img) {
                 backsideHTML[1] = img.width;
                 backsideHTML[3] = img.height;
@@ -99,6 +114,7 @@ jQuery(function($){
                                     $(this).toggleClass('flipped');
                                })
                   , id: img.id + 'sub'
+                  , meta: ns[img.src.match(collection)[0]]
                 });
                 backsideCollage.debug = true;
                 //if(i !== 10)
