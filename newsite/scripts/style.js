@@ -64,28 +64,36 @@ jQuery(function($){
                 console.log("tries: %s \nsrc: %s", (tries ? tries[1] : 1), img.src);
             });
         }
-        function positionImages($proper) {
+        function positionImages($images) {
             // find and set the coordinates of loaded images
-            $proper.each(function(i, img){
+            $images.each(function(i, img){
                 $(img).css({
                     top: img.offsetTop,
                     left:img.offsetLeft
                 });
             });
-            $proper.addClass('positioned');
+            $images.addClass('positioned');
         }
         $('.content-scene img').imagesLoaded(function($images, $proper, $broken) {
             // reload broken images
             if($broken.length)
                 fixBrokenImages($broken);
             // position images
-            positionImages($images);
+            positionImages($images.parent());
             // create new scenes behind the images
-            /*$images.each(function createScenes(i, img) {
-                if(i !== 0)
-                    return;
-                subCollages.push( (new Collage( { canvas: $('<div class="sub"><div class="content-scene"></div></div>').insertAfter(img), id: img.id + 'sub' } )).createCollage() );
+           /* $images.each(function createScenes(i, img) {
+                $('<div class="back" style="width:' + img.width + 'px;height:' + img.height + 'px;" />').insertAfter(img).parent().on('click', function toggleFlip() {
+                    $(this).toggleClass('flipped');
+                });
             });*/
+            $images.each(function createScenes(i, img) {
+                var html = '<div class="back content-scene" style="width:' + img.width + 'px;height:' + img.height + 'px;" />';
+                //if(i !== 10)
+                //    return;
+                subCollages.push( (new Collage( { canvas: $(html).insertAfter(img).parent().on('click', function toggleFlip() {
+                    $(this).toggleClass('flipped');
+                }), id: img.id + 'sub' } )).createCollage() );
+            });
         });        
         ns.growAside($, $content);        
         // set the scene for effects
@@ -105,7 +113,7 @@ jQuery(function($){
             // set the scene for effects
             $('.content-scene').css({ width: $content.width(), height: $content.height() });
             setTimeout(function() {
-                positionImages($('.content-scene img'));
+                positionImages($('.collage-item'));
                 ns.growAside($, $content);
             }, 200);            
         }
