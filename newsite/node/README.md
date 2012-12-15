@@ -1,9 +1,9 @@
-# ImageMeta
+# imagemeta-cli
 
-Image Meta - Get image meta data like width and height as JSON
+Image Meta Command Line Interface - Get image meta data like width and height as JSON
 
 ## Getting Started
-Install the module with: `npm install ImageMeta`
+Install the module with: `npm install imagemeta-cli`
 
 ```javascript
 var im = require('imagemeta');

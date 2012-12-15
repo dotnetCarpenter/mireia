@@ -15,43 +15,61 @@ function meta(conf) {
 }
 
 with({ p: exports, fs: require('fs'), im: require('imagemagick') }) {
-    p.buildImageMetaObjects = function(images) {
-        images.forEach(function getMetaObject(img) {
-        	;
-        });
-        /*$('.content img').each(function(i, el) {
-            metaData.push(new meta({ src: el.src.replace(/^.+(?=images\/)/, ''), width: el.naturalWidth, height: el.naturalHeight }));
-        });*/
-        return this.metaData;
-    };
-    p.writeMetaObjects = function(filepath) {
-        console.log(
-            JSON.stringify(
-                getImageMeta()
-            )
-        );
-    };
-    p.readFolder = function(folder, cb) {
-    	var self = this;
-    	fs.readdir(folder, function(err, files) {
-    		if(err)
-    			return cb.call(cb, err);
-    		files.forEach(function(file, i){
-    			//if(i === 1)
-    				p.readFile(folder + file);
-    		});
-    		//cb.call(cb, self.metaData);
+    p.writeMetaObjects = function(filepath, images, verbose) {
+    	fs.exists(filepath, function writeStream (append) {
+    		if(verbose)
+    			console.log(append ? "TODO: Will append to %s" : "Will write to %s", filepath);
+    		fs.createWriteStream(filepath, { flags: append ? "a" : "w" }).write(JSON.stringify(images));
     	});
     };
-    p.readFile = function(path) {
-		// winner!
-		im.identify(['-format', 'width: %w height: %h', path], function(err, obj){
-    		if(!err)
-		  		console.log("[imagemagick::identify::format] %s %s", path.replace(/^.+(?=images\/)/, ''), obj);
-		});		
-    }
-    p.readFileIterator = function(file, i, all) {
-    	//console.log(file);
-    	this.metaData.push(new meta({ src: file, width:0, height:0 }));
+    p.readFolder = function(folder, cb, verbose, filter) {
+    	fs.readdir(folder, function fsReadDir(err, files) {
+    		var images = [];
+    		if(err)
+    			return cb.call(cb, err);
+
+    		files.forEach(function(file, i, all){
+				p.readFile(folder + file, function collectImages(err, image) {
+					if(err)
+    					return cb.call(cb, err);
+
+					images.push(image);
+					if(i === all.length-1)
+						cb.call(cb, null, images);
+				}, verbose);
+    		});
+    	});
+    };
+    p.readFile = function(path, cb, verbose, filter) {
+    	var shortpath = /^.+(?=images\/)/,	//TODO: perhaps something a little more generic?
+    		imageExtensions = /\.(png|gif|jpg|svg)$/;
+    	if(!imageExtensions.test(path)) {
+    		if(verbose)
+    			console.log('Skipping '+path);
+    		return;
+    	}
+
+    	im.readMetadata(path, function(err, obj){
+    		if(err)
+    			return cb.call(cb, err);
+
+			cb.call(cb, null, new meta({
+				src: 	path.replace(shortpath, ''),
+				width:  obj.exif["exifImageWidth"],
+				height: obj.exif["exifImageLength"]
+			}));
+		});
+/*		TODO: look into using rdjpgcom as it seems to be common on unix/linux
+		im.identify(path, function(err, obj){
+    		if(err)
+    			return cb.call(cb, err);
+
+			cb.call(cb, null, new meta({
+				src: 	path.replace(shortpath, ''),
+				width:  obj.width,
+				height: obj.height  
+			}));
+		});
+*/
     };
 }

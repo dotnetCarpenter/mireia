@@ -1,5 +1,5 @@
 {
-  "name": "ImageMeta",
+  "name": "imagemeta-cli",
   "description": "Image Meta - Get image meta data like width and height as JSON",
   "version": "0.1.0",
   "homepage": "https://github.com/dotnetCarpenter/mireia/tree/master/newsite/node",
@@ -9,7 +9,8 @@
     "url": "https://www.google.com/search?q=dotnetCarpenter"
   },
   "dependencies": {
-    "commander": ">=4.1.2"
+    "commander": ">=4.1.2",
+    "imagemagick": ">=0.1.3"
   },
   "repository": {
     "type": "git",
