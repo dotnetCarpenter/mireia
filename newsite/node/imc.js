@@ -2,32 +2,34 @@
 
 /**
  * Image Meta Command line inferface
- * @version 12.12.1
+ * @version 12.15.1
  */
 var program = require("commander"),
 	im = require("./lib/imagemeta"),
 	fs = require("fs"),
 	hasDestination = /.+\.json$/,
-	destination,
-	filter;
+	destination;
 
 version(function kickoff(success, v) {
 	if(success) {
 		program
 			.version(v)
-			.usage('[options] <folder ...> <file ...> <destination.json> | -f <filter> <folder ...> <file ...> <destination.json>')	
+			.usage('[options] <folder ...> <file ...> <destination.json>\n\t NOTE: Does not support animated gif')	
+			.option('-f, --filter <filter>', 'filter image files - the first argument after -f must be the <filter>\n\t\t\t   Example: -f "image\\d{2}"')
+			.option('-p. --prefix <prefix>', 'prefix the src in the output JSON - the first argument after -f must be the <prefix>\n\t\t\t   Example: -p "../assets/images/highres"')
 			.option('-v, --verbose', 'output process information - error messages will always be output')
-			.option('-f, --filter', 'filter image files - the first argument after [options] must be the <filter>\n\tExample: -f "image\\d{2}"')
 			.parse(process.argv);
 
 		if(program.args.length === 0)
 			program.help();
 
+/*log(' args: %j', program.args);
+log(' args: %j', program.prefix);
+log(' args: %j', program.filter);
+log(' args: %j', program.verbose);*/
+
 		if( hasDestination.test(program.args.slice(-1)[0]) )
 			destination = program.args.splice(-1)[0];
-
-		if(program.filter)
-			filter = program.args.splice(0,1)[0];
 
 		program.args.forEach(function(argument, i, all) {
 			fs.stat(argument, function folderOrFile(err, stat) {
@@ -38,13 +40,13 @@ version(function kickoff(success, v) {
 				//console.log(argument);
 
 				if(stat.isFile()) {
-					im.readFile(argument, imageHandler, program.verbose, filter);
+					im.readFile(argument, imageHandler, { verbose: program.verbose, filter: program.filter, prefix: program.prefix });
 				} else if(stat.isDirectory()) {
-					im.readFolder(argument, imageHandler, program.verbose, filter);	
+					im.readFolder(argument, imageHandler, { verbose: program.verbose,filter: program.filter, prefix: program.prefix });	
 				}
 			});			
 		});
-		//log(' args: %j', program.args);
+		
 	} else {
 		log("Error: can not read file package.json.\nTERMINATING!")
 		process.stdin.destroy();
@@ -53,9 +55,15 @@ version(function kickoff(success, v) {
 });
 
 function imageHandler (err, images) {
-	var l = images.length || 1, s = images.length ? "s" : "";
 	if(err)
 		log(err);
+
+	if(!images || images.length < 1) {
+		log("Didn't find any images that match your criteria.");
+		return;
+	}
+
+	var l = images.length || 1, s = images.length ? "s" : "";
 	if(program.verbose)
 		log("Got meta data from %d file%s.", l, s);
 	if(destination) {
@@ -70,7 +78,7 @@ function imageHandler (err, images) {
 function version (cb) {
 	var path = __dirname + "/package.json",
 		version = /version(?:"|'):(?:\s|)(?:"|')(.+)(?:"|'),/;
-	fs.readFile(path, "utf-8", function(err, content) {
+	fs.readFile(path, "utf8", function(err, content) {
 		if(err) {
 			log(err);
 			cb.call(cb, false, err);

@@ -22,7 +22,8 @@ _(Coming soon)_
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [grunt](https://github.com/gruntjs/grunt).
 
 ## Release History
-_(Nothing yet)_
+0.1.1 Fixed out JSON when writing from multiple sources, E.I. different folders and files. Added prefix path to output JSON ```src`` property. Support for jpg, tiff, png and gif.
+0.1.0 Initial Release - only support for jpg
 
 ## License
 Copyright (c) 2012 dotnetCarpenter  

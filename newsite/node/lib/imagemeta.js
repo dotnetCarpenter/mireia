@@ -15,52 +15,42 @@ function meta(conf) {
 }
 
 with({ p: exports, fs: require('fs'), im: require('imagemagick'), meta:meta }) {
+    p.createArray = function(obj) {
+        if(Array.isArray(obj))
+            return obj;
+        return [obj]
+    };
     p.writeMetaObjects = function(filepath, images, verbose) {
-        //TODO: if several objects are written to file, the JSON is invalid. remove: '][' from file
-    	/*if(verbose)
-			console.log("Will append to %s", filepath);*/
-		//fs.createWriteStream(filepath, { flags:"a" }).end(JSON.stringify(images));
-        var seperators = /(\]\[|\}\{)/g;
-        //var buffer = new Buffer(JSON.stringify(images), "utf8");
-        var writeStream = fs.createWriteStream(filepath, { flags: "a", encoding: "utf8" });
-        //var overwriteStream = fs.createWriteStream(filepath, { flags: "w", encoding: "utf8" });
-        var readStream = fs.createReadStream(filepath, { encoding: "utf8" });
-
-        console.log(images);
-        //console.dir(appendStream);
-        //console.dir(overwriteStream);
-        
-        readStream.on("data", function(json) {
-            console.log("data", json);
-            if( seperators.test(json) ) {
-                console.log("we got wrong json");
-                /*writeStream.flags = "w";
-                console.dir(writeStream);
-                writeStream.write*/
-                fs.writeFile(filepath, json.replace(seperators, function(match) {
-                    if(match === "}{")
-                        return "},{";
-                    if(match === "][")
-                        return ",";
-                    //console.log("a %s, b %s, c %s, d %s", a,b,c,d);
-                }));
+        fs.exists(filepath, function writeStream (exists) {
+            if(exists) {
+                fs.readFile(filepath, function addJson(err, json) {
+                    var metaData = [];
+                    if(err) {
+                        console.log(err)
+                        return;
+                    }
+                    try {
+                        metaData = JSON.parse(json);
+                    } catch(err) {
+                        console.log("JSON output is b0rken! %j", err);
+                        return;
+                    }
+                    fs.writeFile(filepath, JSON.stringify(p.createArray(metaData).concat(p.createArray(images))), function errLogger (err) {
+                        if(err) {
+                            console.log(err)
+                            return;
+                        }
+                    });
+                });
             } else {
-               writeStream.on("drain", function() { console.log("drain"); readStream.destroy(); });
+                fs.writeFile(filepath, JSON.stringify(images), function writtenFileHandler(err) {
+                    if(err) {
+                        console.log(err)
+                        return;
+                    }
+                });
             }
         });
-        readStream.pipe(writeStream, { end: false });
-        writeStream.write(JSON.stringify(images));
-
-    	/*
-    	fs.exists(filepath, function writeStream (exists) {
-    		if(verbose)
-    			console.log(append ? "TODO: Will append to %s" : "Will write to %s", filepath);
-            if(exists) {
-
-            } else {
-                fs.createWriteStream(filepath, { flags: append ? "a" : "w" }).end(JSON.stringify(images));
-            }    		
-    	});*/
     };
     p.readFolder = function(folder, cb, options) {
     	fs.readdir(folder, function fsReadDir(err, files) {
