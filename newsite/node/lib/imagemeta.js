@@ -14,7 +14,7 @@ function meta(conf) {
     this.height = conf.height;
 }
 
-with({ p: exports, fs: require('fs'), exif: require('exif2'), im: require('imagemagick') }) {
+with({ p: exports, fs: require('fs'), im: require('imagemagick') }) {
     p.buildImageMetaObjects = function(images) {
         images.forEach(function getMetaObject(img) {
         	;
@@ -44,18 +44,6 @@ with({ p: exports, fs: require('fs'), exif: require('exif2'), im: require('image
     	});
     };
     p.readFile = function(path) {
-    	exif(path, function(err, obj){
-    		if(!err)
-		  		console.log("[exif2] %s width: %d height: %d", path.replace(/^.+(?=images\/)/, ''), obj["image width"], obj["image height"]);
-		});
-    	im.identify(path, function(err, obj){
-    		if(!err)
-		  		console.log("[imagemagick::identify] %s width: %d height: %d", path.replace(/^.+(?=images\/)/, ''), obj["width"], obj["height"]);
-		});
-		im.readMetadata(path, function(err, obj){
-    		if(!err)
-		  		console.log("[imagemagick::readMetadata] %s width: %d height: %d ", path.replace(/^.+(?=images\/)/, ''), obj.exif["exifImageWidth"], obj.exif["exifImageLength"]);
-		});
 		// winner!
 		im.identify(['-format', 'width: %w height: %h', path], function(err, obj){
     		if(!err)
