@@ -86,13 +86,24 @@ jQuery(function($){
                     $(this).toggleClass('flipped');
                 });
             });*/
+            var backsideHTML = ['<div class="back content-scene" style="width:',,'px;height:',,'px;" />']
             $images.each(function createScenes(i, img) {
-                var html = '<div class="back content-scene" style="width:' + img.width + 'px;height:' + img.height + 'px;" />';
+                backsideHTML[1] = img.width;
+                backsideHTML[3] = img.height;
+                var backsideCollage = new Collage(
+                {
+                    canvas: $(backsideHTML.join(''))
+                                .insertAfter(img)
+                                .parent()
+                                .on('click', function toggleFlip() {
+                                    $(this).toggleClass('flipped');
+                               })
+                  , id: img.id + 'sub'
+                });
+                backsideCollage.debug = true;
                 //if(i !== 10)
                 //    return;
-                subCollages.push( (new Collage( { canvas: $(html).insertAfter(img).parent().on('click', function toggleFlip() {
-                    $(this).toggleClass('flipped');
-                }), id: img.id + 'sub' } )).createCollage() );
+                subCollages.push( backsideCollage.createCollage() );
             });
         });        
         ns.growAside($, $content);        
