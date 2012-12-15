@@ -8,37 +8,39 @@ var program = require("commander"),
 	im = require("./lib/imagemeta"),
 	fs = require("fs"),
 	hasDestination = /.+\.json$/,
-	destination;
+	destination,
+	filter;
 
 version(function kickoff(success, v) {
 	if(success) {
 		program
 			.version(v)
-			.usage('[options] <folder ...> | <file ...> <destination.json>')	
+			.usage('[options] <folder ...> <file ...> <destination.json> | -f <filter> <folder ...> <file ...> <destination.json>')	
 			.option('-v, --verbose', 'output process information - error messages will always be output')
-			.option('-f, --filter', 'filter image files')
+			.option('-f, --filter', 'filter image files - the first argument after [options] must be the <filter>\n\tExample: -f "image\\d{2}"')
 			.parse(process.argv);
 
 		if(program.args.length === 0)
 			program.help();
 
 		if( hasDestination.test(program.args.slice(-1)[0]) )
-			destination = program.args.slice(-1)[0];
+			destination = program.args.splice(-1)[0];
+
+		if(program.filter)
+			filter = program.args.splice(0,1)[0];
 
 		program.args.forEach(function(argument, i, all) {
-			if(destination && i === all.length-1)	// skip the last arg if it's a destination
-				return;
-
 			fs.stat(argument, function folderOrFile(err, stat) {
 				if(err) {
 					log(err);
 					return;
 				}
+				//console.log(argument);
 
 				if(stat.isFile()) {
-					im.readFile(argument, imageHandler, program.verbose)
+					im.readFile(argument, imageHandler, program.verbose, filter);
 				} else if(stat.isDirectory()) {
-					im.readFolder(argument, imageHandler, program.verbose);	
+					im.readFolder(argument, imageHandler, program.verbose, filter);	
 				}
 			});			
 		});

@@ -16,15 +16,19 @@ function meta(conf) {
 
 with({ p: exports, fs: require('fs'), im: require('imagemagick') }) {
     p.writeMetaObjects = function(filepath, images, verbose) {
+    	if(verbose)
+			console.log("Will append to %s", filepath);
+		fs.createWriteStream(filepath, { flags:"a" }).write(JSON.stringify(images));
+    	/*
     	fs.exists(filepath, function writeStream (append) {
     		if(verbose)
     			console.log(append ? "TODO: Will append to %s" : "Will write to %s", filepath);
     		fs.createWriteStream(filepath, { flags: append ? "a" : "w" }).write(JSON.stringify(images));
-    	});
+    	});*/
     };
     p.readFolder = function(folder, cb, verbose, filter) {
     	fs.readdir(folder, function fsReadDir(err, files) {
-    		var images = [];
+    		var images = [], callCounter = 0;
     		if(err)
     			return cb.call(cb, err);
 
@@ -33,26 +37,32 @@ with({ p: exports, fs: require('fs'), im: require('imagemagick') }) {
 					if(err)
     					return cb.call(cb, err);
 
-					images.push(image);
-					if(i === all.length-1)
+    				if(image)
+						images.push(image);
+					
+					callCounter++;
+					
+					if(callCounter === all.length)
 						cb.call(cb, null, images);
-				}, verbose);
+				}, verbose, filter);
     		});
     	});
     };
     p.readFile = function(path, cb, verbose, filter) {
     	var shortpath = /^.+(?=images\/)/,	//TODO: perhaps something a little more generic?
-    		imageExtensions = /\.(png|gif|jpg|svg)$/;
-    	if(!imageExtensions.test(path)) {
+    		imageExtensions = /\.(png|gif|jpg|svg)$/,
+    		fileFilter = new RegExp(filter);
+
+    	if(!imageExtensions.test(path) || filter && !fileFilter.test(path)) {
     		if(verbose)
     			console.log('Skipping '+path);
-    		return;
+    		return cb(null, null);
     	}
 
-    	im.readMetadata(path, function(err, obj){
+    	im.readMetadata(path, function(err, obj) {    		
     		if(err)
     			return cb.call(cb, err);
-
+//console.log("getting %s", path, obj, cb)
 			cb.call(cb, null, new meta({
 				src: 	path.replace(shortpath, ''),
 				width:  obj.exif["exifImageWidth"],
