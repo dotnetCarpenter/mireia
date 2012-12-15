@@ -22,8 +22,8 @@ with({ p: exports, fs: require('fs'), im: require('imagemagick'), meta:meta }) {
 		//fs.createWriteStream(filepath, { flags:"a" }).end(JSON.stringify(images));
         var seperators = /(\]\[|\}\{)/g;
         //var buffer = new Buffer(JSON.stringify(images), "utf8");
-        var appendStream = fs.createWriteStream(filepath, { flags: "a", encoding: "utf8" });
-        var overwriteStream = fs.createWriteStream(filepath, { flags: "w", encoding: "utf8" });
+        var writeStream = fs.createWriteStream(filepath, { flags: "a", encoding: "utf8" });
+        //var overwriteStream = fs.createWriteStream(filepath, { flags: "w", encoding: "utf8" });
         var readStream = fs.createReadStream(filepath, { encoding: "utf8" });
 
         console.log(images);
@@ -34,19 +34,22 @@ with({ p: exports, fs: require('fs'), im: require('imagemagick'), meta:meta }) {
             console.log("data", json);
             if( seperators.test(json) ) {
                 console.log("we got wrong json");
-                overwriteStream.write(json.replace(seperators, function(match) {
+                /*writeStream.flags = "w";
+                console.dir(writeStream);
+                writeStream.write*/
+                fs.writeFile(filepath, json.replace(seperators, function(match) {
                     if(match === "}{")
                         return "},{";
                     if(match === "][")
                         return ",";
                     //console.log("a %s, b %s, c %s, d %s", a,b,c,d);
                 }));
+            } else {
+               writeStream.on("drain", function() { console.log("drain"); readStream.destroy(); });
             }
-            appendStream.on("drain", function() { console.log("drain"); appendStream.destroySoon(); overwriteStream.destroySoon(); readStream.destroy(); });
-            
         });
-        readStream.pipe(appendStream, { end: false });
-        appendStream.write(JSON.stringify(images));
+        readStream.pipe(writeStream, { end: false });
+        writeStream.write(JSON.stringify(images));
 
     	/*
     	fs.exists(filepath, function writeStream (exists) {
