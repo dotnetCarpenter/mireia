@@ -2,7 +2,7 @@
 
 /**
  * Image Meta Command line inferface
- * @version 12.15.1
+ * @version 12.12.15.1
  */
 var program = require("commander"),
 	im = require("./lib/imagemeta"),
