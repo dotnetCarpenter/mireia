@@ -7,7 +7,7 @@ ns.gcd = function(a, b) {
 // image meta data
 ns.main = [{"src":"images/mainfotos/col1.1.jpg","width":1701,"height":1134},{"src":"images/mainfotos/col2.1.jpg","width":1701,"height":1134},{"src":"images/mainfotos/col3.1.jpg","width":1626,"height":1125},{"src":"images/mainfotos/col5.1.jpg","width":1582,"height":1134},{"src":"images/mainfotos/col6.1.jpg","width":1701,"height":1134},{"src":"images/mainfotos/col4.1.jpg","width":850,"height":1276},{"src":"images/mainfotos/unik2.jpg","width":831,"height":1247},{"src":"images/mainfotos/col7.1.jpg","width":1304,"height":1134},{"src":"images/mainfotos/col8.1.jpg","width":1701,"height":978},{"src":"images/mainfotos/unik1.jpg","width":1469,"height":1128},{"src":"images/mainfotos/unik3.jpg","width":1701,"height":1134}];
 ns.col1 = [{"src":"images/mainfotos/col1.1.jpg","width":1701,"height":1134},{"src":"images/subfotos/col1.2.jpg","width":1701,"height":1134},{"src":"images/subfotos/col1.5.jpg","width":1701,"height":1134},{"src":"images/subfotos/col1.3.jpg","width":1701,"height":1134},{"src":"images/subfotos/col1.4.jpg","width":1701,"height":1134}];
-ns.col2 = [{"src":"images/subfotos/col3.2.jpg","width":1107,"height":1701},{"src":"images/subfotos/col3.4.jpg","width":1701,"height":1134},{"src":"images/subfotos/col3.3.jpg","width":1701,"height":1134},{"src":"images/mainfotos/col3.1.jpg","width":1626,"height":1125}];
+ns.col2 = [{"src":"images/mainfotos/col2.1.jpg","width":1701,"height":1134},{"src":"images/subfotos/col2.3.jpg","width":1701,"height":1134},{"src":"images/subfotos/col2.2.jpg","width":1701,"height":1134}];
 ns.col3 = [{"src":"images/subfotos/col3.2.jpg","width":1107,"height":1701},{"src":"images/subfotos/col3.4.jpg","width":1701,"height":1134},{"src":"images/subfotos/col3.3.jpg","width":1701,"height":1134},{"src":"images/mainfotos/col3.1.jpg","width":1626,"height":1125}];
 ns.col4 = [{"src":"images/mainfotos/col4.1.jpg","width":850,"height":1276},{"src":"images/subfotos/col4.2.jpg","width":1128,"height":1458},{"src":"images/subfotos/col4.4.jpg","width":1678,"height":1130},{"src":"images/subfotos/col4.3.jpg","width":1701,"height":1134}];
 ns.col5 = [{"src":"images/mainfotos/col5.1.jpg","width":1582,"height":1134},{"src":"images/subfotos/col5.3.jpg","width":4984,"height":3936},{"src":"images/subfotos/col5.2.jpg","width":5360,"height":3936}];
@@ -86,7 +86,7 @@ jQuery(function($){
                     left:img.offsetLeft
                 });
             });
-            $images.addClass('positioned');
+            $images.addClass('positioned').removeClass('loading');
         }
         $('.content-scene img').imagesLoaded(function($images, $proper, $broken) {
             // reload broken images
@@ -103,26 +103,38 @@ jQuery(function($){
             var backsideHTML = ['<div class="back content-scene" style="width:',,'px;height:',,'px;" />'],
                 collection = /(col|unik)\d{1,2}/;
             $images.each(function createScenes(i, img) {
+                var metaArray = ns[img.src.match(collection)[0]],
+                    backsideCollage,
+                    canvas;
+
                 backsideHTML[1] = img.width;
                 backsideHTML[3] = img.height;
-                var backsideCollage = new Collage(
-                {
-                    canvas: $(backsideHTML.join(''))
-                                .insertAfter(img)
-                                .parent()
-                                .on('click', function toggleFlip() {
-                                    $(this).toggleClass('flipped');
-                               })
-                  , id: img.id + 'sub'
-                  , meta: ns[img.src.match(collection)[0]]
-                });
-                backsideCollage.debug = true;
-                //if(i !== 10)
-                //    return;
-                subCollages.push( backsideCollage.createCollage() );
+                canvas = $(backsideHTML.join(''))
+                                    .insertAfter(img)
+                                    .parent()
+                                    .on('click', function toggleFlip() {
+                                        $(this).toggleClass('flipped');
+                                   });
+                if(metaArray.length > 1) {
+                    backsideCollage = new Collage({
+                        canvas: canvas
+                      , id: img.id + 'sub'
+                      , meta: metaArray
+                    });
+                    //backsideCollage.debug = true;
+                    subCollages.push( backsideCollage.createCollage() );
+                } else {
+                    collage.html[1] = img.id + 'sub0'
+                    collage.html[7] = collage.style[1] = img.width;
+                    collage.html[9] = collage.style[3] = img.height;
+                    collage.html[3] = collage.style.join('');
+                    collage.html[5] = img.src;
+                    collage.html[11] = img.id + 'sub0';
+                    canvas.children('.back').append(collage.html.join(''));
+                }
             });
         });        
-        ns.growAside($, $content);        
+        ns.growAside($, $content);
         // set the scene for effects
         $('.content-scene').css({ width: $content.width(), height: $content.height() });
         

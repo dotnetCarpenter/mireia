@@ -26,6 +26,9 @@ function Collage(conf) {
     this.imgMargin = 10;
     this.lastImageIndex = 0;
     this.firstImagePerRow = [];
+    //    html = ['<img alt="Photo by Rolando Diaz" src="http://src','','.sencha.io/jpg100/',,'/',,'/',base,,'" width="',,'" height="',,'" id="',,'"/>'],
+    this.style = ['width:',,'px;height:',,'px;'];
+    this.html = ['<div class="collage-item loading" id="collage',,'" style="',,'"><img alt="Photo by Rolando Diaz" src="',,'" width="',,'" height="',,'" id="',,'"/></div>'];
    /**
      * Randomize array element order in-place.
      * Using Fisher-Yates shuffle algorithm.
@@ -101,9 +104,7 @@ with({p: Collage.prototype}) {
     };
     p.createImages = function(images, urls) {
         var base = document.baseURI.replace(/\w+\.\w{3,4}$/, ''),
-        //    html = ['<img alt="Photo by Rolando Diaz" src="http://src','','.sencha.io/jpg100/',,'/',,'/',base,,'" width="',,'" height="',,'" id="',,'"/>'],
-            style = ['width:',,'px;height:',,'px;'],
-            html = ['<div class="collage-item" id="collage',,'" style="',,'"><img alt="Photo by Rolando Diaz" src="',,'" width="',,'" height="',,'" id="',,'"/></div>'],
+            self = this,
             scene = this.canvas.find('.content-scene'),
             id;
         if( scene.has('img').length ) {
@@ -117,22 +118,22 @@ with({p: Collage.prototype}) {
         } else {
             images.forEach(function insertImage(img, i, all) {
                 id = this.id + i;
-                style[1] = img[0];
-                style[3] = img[1];
-                //html[1] = i % 4 + 1;    // sencha io server shards
-                /*html[3] = img[0];
-                html[5] = img[1];
-                html[8] = urls[i];
-                html[10] = img[0];
-                html[12]= img[1];
-                html[14] = this.id + i;*/
-                html[1] = p.capitalize(id);
-                html[3] = style.join('');
-                html[5] = urls[i];
-                html[7] = img[0];
-                html[9] = img[1];
-                html[11] = id;
-                $(html.join(''))
+                self.style[1] = img[0];
+                self.style[3] = img[1];
+                //self.html[1] = i % 4 + 1;    // sencha io server shards
+                /*self.html[3] = img[0];
+                self.html[5] = img[1];
+                self.html[8] = urls[i];
+                self.html[10] = img[0];
+                self.html[12]= img[1];
+                self.html[14] = this.id + i;*/
+                self.html[1] = p.capitalize(id);
+                self.html[3] = self.style.join('');
+                self.html[5] = urls[i];
+                self.html[7] = img[0];
+                self.html[9] = img[1];
+                self.html[11] = id;
+                $(self.html.join(''))
                     .appendTo(scene);
             }, this);
         }
