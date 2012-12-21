@@ -14,9 +14,9 @@ version(function kickoff(success, v) {
 	if(success) {
 		program
 			.version(v)
-			.usage('[options] <folder ...> <file ...> <destination.json>\n\t NOTE: Does not support animated gif')	
+			.usage('[options] <folder ...> <file ...> [<destination.json>]\n\t NOTE: Does not support animated gif')			
+			.option('-p. --prefix <prefix>', 'prefix the src in the output JSON - the first argument after -p must be the <prefix>\n\t\t\t   Example: -p "../assets/images/highres"')
 			.option('-f, --filter <filter>', 'filter image files - the first argument after -f must be the <filter>\n\t\t\t   Example: -f "image\\d{2}"')
-			.option('-p. --prefix <prefix>', 'prefix the src in the output JSON - the first argument after -f must be the <prefix>\n\t\t\t   Example: -p "../assets/images/highres"')
 			.option('-v, --verbose', 'output process information - error messages will always be output')
 			.parse(process.argv);
 
@@ -37,7 +37,7 @@ log(' args: %j', program.verbose);*/
 					log(err);
 					return;
 				}
-				//console.log(argument);
+				//console.log(argument, program.prefix);
 
 				if(stat.isFile()) {
 					im.readFile(argument, imageHandler, { verbose: program.verbose, filter: program.filter, prefix: program.prefix });

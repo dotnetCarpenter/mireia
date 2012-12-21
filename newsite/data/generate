@@ -1,0 +1,41 @@
+#!/bin/bash
+# Generate JSON files for images by collection
+verbose=""
+if [[ $1 == "-v" || $1 == "--verbose" ]]; then
+	verbose="-v"
+fi
+
+rm *.json
+
+../node/imc.js $verbose --prefix "images/mainfotos/" ../images/mainfotos/ images.json
+
+../node/imc.js $verbose --prefix "images/mainfotos/" ../images/mainfotos/unik1.jpg unik1.json
+../node/imc.js $verbose --prefix "images/mainfotos/" ../images/mainfotos/unik2.jpg unik2.json
+../node/imc.js $verbose --prefix "images/mainfotos/" ../images/mainfotos/unik3.jpg unik3.json
+collections=("col1" "col2" "col3" "col4" "col5" "col6" "col7" "col8")
+for pattern in ${collections[@]}
+do
+	../node/imc.js $verbose -f ${pattern} --prefix "images/mainfotos" ../images/mainfotos/ ${pattern}.json
+	../node/imc.js $verbose -f ${pattern} --prefix "images/subfotos" ../images/subfotos/ ${pattern}.json
+done
+
+#../node/imc.js -f col1 --prefix "images/mainfotos" ../images/mainfotos/ col1.json
+#../node/imc.js -f col1 --prefix "images/subfotos" ../images/subfotos/ col1.json
+
+#../node/imc.js -f col2 --prefix "images/mainfotos" ../images/mainfotos/ col2.json
+#../node/imc.js -f col2 --prefix "images/subfotos" ../images/subfotos/ col2.json
+
+#../node/imc.js -f col3 --prefix "images/mainfotos" ../images/mainfotos/ col3.json
+#../node/imc.js -f col3 --prefix "images/subfotos" ../images/subfotos/ col3.json
+
+#../node/imc.js -f col4 --prefix "images/mainfotos" ../images/mainfotos/ col4.json
+#../node/imc.js -f col4 --prefix "images/subfotos" ../images/subfotos/ col4.json
+
+#../node/imc.js -f col5 --prefix "images/mainfotos" ../images/mainfotos/ col5.json
+#../node/imc.js -f col5 --prefix "images/subfotos" ../images/subfotos/ col5.json
+
+#../node/imc.js -f col6 --prefix "images/mainfotos" ../images/mainfotos/ col6.json
+#../node/imc.js -f col6 --prefix "images/subfotos" ../images/subfotos/ col6.json
+
+#../node/imc.js -f col7 --prefix "images/mainfotos" ../images/mainfotos/ col7.json
+#../node/imc.js -f col7 --prefix "images/subfotos" ../images/subfotos/ col7.json

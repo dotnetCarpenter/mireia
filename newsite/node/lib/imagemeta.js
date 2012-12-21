@@ -43,7 +43,7 @@ with({ p: exports, fs: require('fs'), im: require('imagemagick'), meta:meta }) {
                     });
                 });
             } else {
-                fs.writeFile(filepath, JSON.stringify(images), function writtenFileHandler(err) {
+                fs.writeFile(filepath, JSON.stringify(images), function writeFileHandler(err) {
                     if(err) {
                         console.log(err)
                         return;

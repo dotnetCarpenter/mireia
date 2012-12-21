@@ -20,6 +20,9 @@ Usage: ./imc.js [options] <folder ...> <file ...> <destination.json>
     -v, --verbose          output process information - error messages will always be output
 ```
 
+## Issues
+-p option doesn't work. Use --prefix instead
+
 ## Documentation
 _(Coming soon)_
 
