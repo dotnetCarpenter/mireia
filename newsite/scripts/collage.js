@@ -63,7 +63,7 @@ with({p: Collage.prototype}) {
     p.placeImage = function(img, i, all) {
         //TODO: implement genetic algorithme for best fit, e.g. randomize image order and calc cost
         // Calc width of elements compared to canvas width
-        var width = 0, bufferThreshold = 100, len = all.length;
+        var width = 0, bufferThreshold = 99, len = all.length;
         if( i === this.lastImageIndex) { // calc per row
             for (var n = i; n < len; ++n) {                        
                 if( (width / this.area[0] * 100) < bufferThreshold ) {
