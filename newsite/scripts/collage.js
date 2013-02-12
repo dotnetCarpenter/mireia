@@ -5,6 +5,7 @@ function Collage(conf) {
     conf = conf || {};
     this.id = conf.id || 'main';
     this.debug = conf.debug || false;
+    // use scrollWidth instead of jQuery innerWidth
     this.scrollbarWidth = (function scrollbarWidth() {
         var div = $('<div style="width:50px;height:50px;overflow:hidden;position:absolute;top:-200px;left:-200px;"><div style="height:100px;"></div>');
         // Append our div, do our calculation and then remove it

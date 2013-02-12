@@ -1,9 +1,29 @@
+<!DOCTYPE html>
 <html>
 <head>
+	<meta charset="utf-8"/>
 	<title>Test of GA</title>
+	<style>
+		h1, form {
+			display: inline-block;
+			line-height: 32px;
+		}
+		form { vertical-align: middle; }
+		#canvas1 {
+			background-color: #eee;
+			width: 100%;
+			height: 600px;
+		}
+	</style>
 	<script src="scripts/collage2.js" type="application/javascript"></script>
 </head>
 <body>
 <h1>Test of GA</h1>
+<form>
+	<button autofocus="autofocus" type="button" onclick="setup();">Run</button>
+</form>
+<section>
+	<div id="canvas1"></div>
+</section>
 </body>
 </html>
